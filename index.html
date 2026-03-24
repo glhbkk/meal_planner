@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj4KICA8cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMkQ3QTNBIi8+CiAgPHJlY3QgeD0iNDQiIHk9IjM2IiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjEzMCIgcng9IjEyIiBmaWxsPSIjZmZmIi8+CiAgPHJlY3QgeD0iNDQiIHk9IjM2IiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjM2IiByeD0iMTIiIGZpbGw9IiNGNUE2MjMiLz4KICA8cmVjdCB4PSI0NCIgeT0iNjAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMTIiIGZpbGw9IiNGNUE2MjMiLz4KICA8cmVjdCB4PSI2MCIgeT0iOTIiIHdpZHRoPSI3MiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIxMTAiIHdpZHRoPSI1NiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIxMjgiIHdpZHRoPSI2NCIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxjaXJjbGUgY3g9IjE0MCIgY3k9IjE0OCIgcj0iMjgiIGZpbGw9IiMyRDdBM0EiLz4KICA8dGV4dCB4PSIxNDAiIHk9IjE1NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyOCIgZmlsbD0id2hpdGUiPuKCqTwvdGV4dD4KPC9zdmc+"/>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj4KICA8cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMkQ3QTNBIi8+CiAgPHJlY3QgeD0iNDQiIHk9IjM2IiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjEzMCIgcng9IjEyIiBmaWxsPSIjZmZmIi8+CiAgPHJlY3QgeD0iNDQiIHk9IjM2IiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjM2IiByeD0iMTIiIGZpbGw9IiNGNUE2MjMiLz4KICA8cmVjdCB4PSI0NCIgeT0iNjAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMTIiIGZpbGw9IiNGNUE2MjMiLz4KICA8cmVjdCB4PSI2MCIgeT0iOTIiIHdpZHRoPSI3MiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIxMTAiIHdpZHRoPSI1NiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIxMjgiIHdpZHRoPSI2NCIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxjaXJjbGUgY3g9IjE0MCIgY3k9IjE0OCIgcj0iMjgiIGZpbGw9IiMyRDdBM0EiLz4KICA8dGV4dCB4PSIxNDAiIHk9IjE1NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyOCIgZmlsbD0id2hpdGUiPuKCqTwvdGV4dD4KPC9zdmc+"/>
   <title>다뱅가계부</title>
-  <!-- ver3.4 -->
+  <!-- ver4.5 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -37,7 +37,7 @@
     body.dark .meal-hdr{background:#333;border-color:#3a3a3a;}
     body.dark .persons-grid{border-color:#3a3a3a;}
     body.dark .person-box:first-child{border-color:#3a3a3a;}
-    body.dark .person-lbl{color:#f0f0f0;border-bottom-color:#3a3a3a;}
+    body.dark .person-lbl{color:#f0f0f0;border-bottom-color:#3a3a3a;} body.dark .person-add-btn{color:#5BA8F5;border-color:#1a4a7a;}
     body.dark .food-tag{background:#333;border-color:#444;color:#f0f0f0;}
     body.dark .empty-txt{color:#555;}
     body.dark .exp-hdr{background:#333;}
@@ -168,7 +168,9 @@
     .persons-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #f0f0f0;}
     .person-box{padding:clamp(8px,2.5vw,12px) clamp(10px,3vw,14px);min-height:clamp(64px,18vw,80px);}
     .person-box:first-child{border-right:1px solid #f0f0f0;}
-    .person-lbl{font-size:clamp(11px,3vw,13px);font-weight:600;color:#222;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #e0e0e0;}
+    .person-lbl{font-size:clamp(11px,3vw,13px);font-weight:600;color:#222;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;}
+    .person-add-btn{font-size:11px;color:#185FA5;background:none;border:0.5px solid #B5D4F4;border-radius:20px;padding:2px 8px;cursor:pointer;font-weight:400;flex-shrink:0;}
+    .person-add-btn:active{background:#E6F1FB;}
     .tag-list{display:flex;flex-wrap:wrap;gap:5px;align-items:flex-start;}
     .food-tag{background:#f5f5f5;border:1px solid #e0e0e0;border-radius:10px;padding:clamp(5px,2vw,8px) clamp(10px,3vw,14px);font-size:clamp(14px,4.5vw,17px);color:#222;cursor:pointer;}
     .food-tag:active{background:#ffe0e0;}
@@ -221,6 +223,14 @@
     .crown-empty{text-align:center;padding:30px 0;color:#ccc;font-size:14px;}
     .stats-empty{text-align:center;padding:40px 0;color:#ccc;font-size:14px;}
 
+    .cat-manage-btn{font-size:11px;color:#aaa;background:none;border:none;cursor:pointer;padding:0;margin-left:auto;text-decoration:underline;}
+    .cat-manage-btn:active{color:#555;}
+    .cat-add-row{display:flex;gap:8px;margin-top:10px;}
+    .cat-add-input{flex:1;padding:8px 12px;font-size:14px;border:1.5px solid #ddd;border-radius:20px;background:#f7f7f7;color:#111;outline:none;}
+    .cat-add-input:focus{border-color:#378ADD;background:#fff;}
+    body.dark .cat-add-input{background:#333;border-color:#444;color:#f0f0f0;}
+    .cat-add-submit{padding:8px 14px;border:none;border-radius:20px;background:#185FA5;color:#fff;font-size:13px;cursor:pointer;white-space:nowrap;}
+    .cat-del-btn{font-size:11px;color:#E24B4A;background:none;border:none;cursor:pointer;padding:2px 4px;margin-left:2px;}
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
     .sheet{background:#ffffff;border-radius:20px 20px 0 0;padding:clamp(16px,5vw,24px) clamp(16px,5vw,24px) clamp(30px,9vw,44px);width:100%;max-width:600px;box-shadow:0 -4px 24px rgba(0,0,0,0.15);}
     .sheet-handle{width:40px;height:4px;background:#ddd;border-radius:2px;margin:0 auto 18px;}
@@ -305,10 +315,35 @@
 <div class="overlay" id="meal-overlay" style="display:none;" onclick="if(event.target===this)closeMeal()">
   <div class="sheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title" id="meal-title"></div>
-    <div class="sheet-sub">각자 먹을 음식을 입력하세요</div>
-    <div class="inp-row"><div class="inp-lbl">다뱅 :</div><input type="text" id="inp-a" placeholder="음식 이름" maxlength="30"/></div>
-    <div class="inp-row"><div class="inp-lbl">리안·지후 :</div><input type="text" id="inp-b" placeholder="음식 이름" maxlength="30"/></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <div class="sheet-title" id="meal-title" style="margin-bottom:0;"></div>
+      <div id="meal-edit-wrap-a" style="display:none;"><button class="cat-manage-btn" onclick="toggleMealEdit('a')" id="meal-edit-btn-a" style="color:#639922;font-size:12px;border:1px solid #c5e0a0;border-radius:20px;padding:3px 12px;">편집</button></div>
+      <div id="meal-edit-wrap-b" style="display:none;"><button class="cat-manage-btn" onclick="toggleMealEdit('b')" id="meal-edit-btn-b2" style="color:#185FA5;font-size:12px;border:1px solid #B5D4F4;border-radius:20px;padding:3px 12px;">편집</button></div>
+    </div>
+    <div class="sheet-sub" id="meal-sub" style="display:none;"></div>
+
+    <div id="meal-section-a" style="display:none;margin-bottom:10px;">
+      <div class="cat-btns" id="meal-btns-a"></div>
+      <div id="meal-add-row-a" style="display:none;">
+        <div class="cat-add-row">
+          <input type="text" class="cat-add-input" id="meal-new-input-a" placeholder="음식 이름 입력" maxlength="15"/>
+          <button class="cat-add-submit" style="background:#639922;" onclick="addMealItem('a')">추가</button>
+        </div>
+      </div>
+      <input type="text" id="inp-a" placeholder="직접 입력" maxlength="30" style="width:100%;padding:10px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;margin-top:6px;"/>
+    </div>
+
+    <div id="meal-section-b" style="display:none;margin-bottom:10px;">
+      <div class="cat-btns" id="meal-btns-b"></div>
+      <div id="meal-add-row-b" style="display:none;">
+        <div class="cat-add-row">
+          <input type="text" class="cat-add-input" id="meal-new-input-b" placeholder="음식 이름 입력" maxlength="15"/>
+          <button class="cat-add-submit" onclick="addMealItem('b')">추가</button>
+        </div>
+      </div>
+      <input type="text" id="inp-b" placeholder="직접 입력" maxlength="30" style="width:100%;padding:10px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;margin-top:6px;"/>
+    </div>
+
     <div class="sheet-btns">
       <button class="btn-save" onclick="saveMeal()">추가하기</button>
       <button class="btn-cancel" onclick="closeMeal()">취소</button>
@@ -322,12 +357,16 @@
     <div class="sheet-handle"></div>
     <div class="sheet-title" id="exp-sheet-title"></div>
     <div class="sheet-sub">사용한 금액을 입력하세요</div>
-    <div class="cat-btns">
-      <button class="cat-btn" onclick="selectCat(this,'쿠팡')">쿠팡</button>
-      <button class="cat-btn" onclick="selectCat(this,'마트')">마트</button>
-      <button class="cat-btn" onclick="selectCat(this,'외식')">외식</button>
-      <button class="cat-btn" onclick="selectCat(this,'병원')">병원</button>
-      <button class="cat-btn" onclick="selectCat(this,'약국')">약국</button>
+    <div style="display:flex;align-items:center;margin-bottom:6px;">
+      <div style="font-size:12px;color:#aaa;">자주 쓰는 항목</div>
+      <button class="cat-manage-btn" onclick="toggleCatEdit()">편집</button>
+    </div>
+    <div class="cat-btns" id="cat-btns-wrap"></div>
+    <div id="cat-add-row" style="display:none;">
+      <div class="cat-add-row">
+        <input type="text" class="cat-add-input" id="cat-new-input" placeholder="새 항목 입력" maxlength="10"/>
+        <button class="cat-add-submit" onclick="addCatItem()">추가</button>
+      </div>
     </div>
     <div class="inp-row"><div class="inp-lbl">내용 :</div><input type="text" id="inp-en" placeholder="예: 편의점, 카페 (선택)" maxlength="20"/></div>
     <div class="inp-row"><div class="inp-lbl">금액 :</div><input type="text" id="inp-ea" inputmode="numeric" placeholder="0원"/></div>
@@ -372,6 +411,140 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 var dbRef = db.ref('mealplanner');
+var catRef = db.ref('categories');
+var mealCatRefA = db.ref('mealcategories_a');
+var mealCatRefB = db.ref('mealcategories_b');
+var DEFAULT_MEAL_CATS = ['밥','라면','빵','샐러드','치킨','피자','김치찌개','된장찌개'];
+var currentMealCatsA = [];
+var currentMealCatsB = [];
+var mealEditModeA = false;
+var mealEditModeB = false;
+
+mealCatRefA.on('value', function(snapshot) {
+  var val = snapshot.val();
+  currentMealCatsA = (val && val.list && val.list.length) ? val.list : DEFAULT_MEAL_CATS.slice();
+  renderMealBtns('a');
+});
+mealCatRefB.on('value', function(snapshot) {
+  var val = snapshot.val();
+  currentMealCatsB = (val && val.list && val.list.length) ? val.list : DEFAULT_MEAL_CATS.slice();
+  renderMealBtns('b');
+});
+
+function getMealCats(person){ return person==='a' ? currentMealCatsA : currentMealCatsB; }
+function getMealRef(person){ return person==='a' ? mealCatRefA : mealCatRefB; }
+function getMealEditMode(person){ return person==='a' ? mealEditModeA : mealEditModeB; }
+
+function renderMealBtns(person) {
+  var wrap = document.getElementById('meal-btns-'+person);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  var cats = getMealCats(person);
+  var editMode = getMealEditMode(person);
+  cats.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'cat-btn';
+    btn.textContent = c;
+    if (editMode) {
+      var del = document.createElement('span');
+      del.className = 'cat-del-btn';
+      del.textContent = '✕';
+      del.onclick = (function(name,p){ return function(e){ e.stopPropagation(); deleteMealItem(p,name); }; })(c,person);
+      btn.appendChild(del);
+    } else {
+      btn.onclick = (function(name,p,b){ return function(){ selectMealBtn(p,b,name); }; })(c,person,btn);
+    }
+    wrap.appendChild(btn);
+  });
+}
+
+function selectMealBtn(person, btn, name) {
+  document.querySelectorAll('#meal-btns-'+person+' .cat-btn').forEach(function(b){b.classList.remove('selected');});
+  btn.classList.add('selected');
+  document.getElementById('inp-'+person).value = name;
+}
+
+function toggleMealEdit(person) {
+  if(person==='a'){ mealEditModeA=!mealEditModeA; }
+  else { mealEditModeB=!mealEditModeB; }
+  var editMode = getMealEditMode(person);
+  document.getElementById('meal-add-row-'+person).style.display = editMode ? 'block' : 'none';
+  var btnId = person==='a' ? 'meal-edit-btn-a' : 'meal-edit-btn-b2';
+  var eb = document.getElementById(btnId); if(eb) eb.textContent = editMode ? '완료' : '편집';
+  renderMealBtns(person);
+}
+
+function addMealItem(person) {
+  var inp = document.getElementById('meal-new-input-'+person);
+  var val = inp.value.trim();
+  if (!val) return;
+  var cats = getMealCats(person);
+  if (cats.indexOf(val) !== -1) { inp.value=''; return; }
+  cats.push(val);
+  getMealRef(person).set({ list: cats });
+  inp.value = '';
+}
+
+function deleteMealItem(person, name) {
+  if(person==='a') currentMealCatsA = currentMealCatsA.filter(function(c){return c!==name;});
+  else currentMealCatsB = currentMealCatsB.filter(function(c){return c!==name;});
+  getMealRef(person).set({ list: getMealCats(person) });
+}
+var DEFAULT_CATS = ['쿠팡','마트','외식','병원','약국'];
+var currentCats = [];
+var catEditMode = false;
+
+catRef.on('value', function(snapshot) {
+  var val = snapshot.val();
+  if (!val || !val.list || val.list.length === 0) {
+    currentCats = DEFAULT_CATS.slice();
+  } else {
+    currentCats = val.list;
+  }
+  renderCatBtns();
+});
+
+function renderCatBtns() {
+  var wrap = document.getElementById('cat-btns-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  currentCats.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'cat-btn';
+    btn.textContent = c;
+    if (catEditMode) {
+      var del = document.createElement('span');
+      del.className = 'cat-del-btn';
+      del.textContent = '✕';
+      del.onclick = (function(name) { return function(e) { e.stopPropagation(); deleteCatItem(name); }; })(c);
+      btn.appendChild(del);
+    } else {
+      btn.onclick = (function(name) { return function() { selectCat(btn, name); }; })(c);
+    }
+    wrap.appendChild(btn);
+  });
+}
+
+function toggleCatEdit() {
+  catEditMode = !catEditMode;
+  document.getElementById('cat-add-row').style.display = catEditMode ? 'block' : 'none';
+  document.querySelector('.cat-manage-btn').textContent = catEditMode ? '완료' : '편집';
+  renderCatBtns();
+}
+
+function addCatItem() {
+  var val = document.getElementById('cat-new-input').value.trim();
+  if (!val) return;
+  if (currentCats.indexOf(val) !== -1) { document.getElementById('cat-new-input').value=''; return; }
+  currentCats.push(val);
+  catRef.set({ list: currentCats });
+  document.getElementById('cat-new-input').value = '';
+}
+
+function deleteCatItem(name) {
+  currentCats = currentCats.filter(function(c) { return c !== name; });
+  catRef.set({ list: currentCats });
+}
 
 var DAYS=['월','화','수','목','금','토','일'];
 var MEALS=[{key:'breakfast',label:'아침',color:'#639922'},{key:'lunch',label:'점심',color:'#185FA5'},{key:'dinner',label:'저녁',color:'#993C1D'}];
@@ -422,25 +595,57 @@ document.getElementById('add-exp-btn').onclick=function(e){
 };
 
 function openMeal(dateStr,mealKey,lbl){
-  mealCell={dateStr:dateStr,mealKey:mealKey};
+  mealCell={dateStr:dateStr,mealKey:mealKey,person:null};
   document.getElementById('meal-title').textContent=lbl;
-  document.getElementById('inp-a').value='';
-  document.getElementById('inp-b').value='';
+  document.getElementById('meal-sub').textContent='각자 먹을 음식을 입력하세요';
+  document.getElementById('inp-a2').value='';
+  document.getElementById('inp-b2').value='';
+  document.getElementById('meal-section-a').style.display='none';
+  document.getElementById('meal-section-b').style.display='none';
+  
+  renderMealBtns2();
   document.getElementById('meal-overlay').style.display='flex';
-  setTimeout(function(){document.getElementById('inp-a').focus();},100);
+  setTimeout(function(){document.getElementById('inp-a2').focus();},100);
 }
-function closeMeal(){document.getElementById('meal-overlay').style.display='none';mealCell=null;}
-function saveMeal(){
-  var vA=document.getElementById('inp-a').value.trim(),vB=document.getElementById('inp-b').value.trim();
-  if(!vA&&!vB){document.getElementById('inp-a').focus();return;}
-  var s=mealCell.dateStr,mk=mealCell.mealKey;
-  if(!D[s])D[s]={};
-  if(!D[s][mk])D[s][mk]={a:[],b:[]};
-  if(vA)D[s][mk].a.push(vA);
-  if(vB)D[s][mk].b.push(vB);
-  save();closeMeal();
+function renderMealBtns2(){
+  ['a','b'].forEach(function(p){
+    var wrap=document.getElementById('meal-btns-'+p+'2');
+    if(!wrap)return;
+    wrap.innerHTML='';
+    getMealCats(p).forEach(function(c){
+      var btn=document.createElement('button');btn.className='cat-btn';btn.textContent=c;
+      btn.onclick=(function(name,pk,b){return function(){
+        document.querySelectorAll('#meal-btns-'+pk+'2 .cat-btn').forEach(function(x){x.classList.remove('selected');});
+        b.classList.add('selected');
+        document.getElementById('inp-'+pk+'2').value=name;
+      };})(c,p,btn);
+      wrap.appendChild(btn);
+    });
+  });
 }
-
+function openMealPerson(dateStr,mealKey,lbl,person){
+  mealCell={dateStr:dateStr,mealKey:mealKey,person:person};
+  document.getElementById('meal-title').textContent=lbl;
+  document.getElementById('meal-sub').textContent='';
+  document.getElementById('meal-section-a').style.display=(person==='a')?'block':'none';
+  document.getElementById('meal-section-b').style.display=(person==='b')?'block':'none';
+  document.getElementById('meal-edit-wrap-a').style.display=(person==='a')?'block':'none';
+  document.getElementById('meal-edit-wrap-b').style.display=(person==='b')?'block':'none';
+  document.getElementById('inp-'+person).value='';
+  renderMealBtns(person);
+  document.getElementById('meal-overlay').style.display='flex';
+  setTimeout(function(){ document.getElementById('inp-'+person).focus(); },150);
+}
+function closeMeal(){
+  document.getElementById('meal-overlay').style.display='none';
+  mealCell=null;
+  ['a','b'].forEach(function(p){
+    var wrap=document.getElementById('meal-btns-'+p);
+    if(wrap) wrap.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('selected');});
+    if(p==='a'&&mealEditModeA){ mealEditModeA=false; var r=document.getElementById('meal-add-row-a');if(r)r.style.display='none'; var eb=document.getElementById('meal-edit-btn-a');if(eb)eb.textContent='편집'; renderMealBtns('a'); }
+    if(p==='b'&&mealEditModeB){ mealEditModeB=false; var r=document.getElementById('meal-add-row-b');if(r)r.style.display='none'; var eb2=document.getElementById('meal-edit-btn-b2');if(eb2)eb2.textContent='편집'; renderMealBtns('b'); }
+  });
+}
 function openExp(key,lbl){
   expDate=key;
   document.getElementById('exp-sheet-title').textContent=lbl+' 지출 추가';
@@ -458,6 +663,7 @@ function closeExp(){
   document.getElementById('exp-overlay').style.display='none';
   expDate=null;
   document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('selected');});
+  if(catEditMode){ catEditMode=false; var row=document.getElementById('cat-add-row'); if(row)row.style.display='none'; var mb=document.querySelector('.cat-manage-btn'); if(mb)mb.textContent='편집'; renderCatBtns(); }
 }
 function saveExp(){
   var n=document.getElementById('inp-en').value.trim(),a=parseInt(document.getElementById('inp-ea').value.replace(/[^0-9]/g,''))||0;
@@ -524,14 +730,17 @@ function render(){
     var md=(D[key]&&D[key][meal.key])||{a:[],b:[]};
     var sec=document.createElement('div');sec.className='meal-sec';
     var mh=document.createElement('div');mh.className='meal-hdr';
-    mh.innerHTML='<div class="meal-hdr-left"><div class="meal-dot" style="background:'+meal.color+'"></div><div class="meal-name">'+meal.label+'</div></div><button class="add-meal-btn">+ 추가</button>';
-    mh.querySelector('.add-meal-btn').onclick=(function(k,mk,ml){return function(e){e.stopPropagation();openMeal(k,mk,ml);};})(key,meal.key,meal.label);
+    mh.innerHTML='<div class="meal-hdr-left"><div class="meal-dot" style="background:'+meal.color+'"></div><div class="meal-name">'+meal.label+'</div></div>';
     sec.appendChild(mh);
     var grid=document.createElement('div');grid.className='persons-grid';
     PERSONS.forEach(function(p){
       var items=md[p.key]||[];
       var box=document.createElement('div');box.className='person-box';
-      var lbl=document.createElement('div');lbl.className='person-lbl';lbl.textContent=p.label;box.appendChild(lbl);
+      var lbl=document.createElement('div');lbl.className='person-lbl';
+      var lblTxt=document.createElement('span');lblTxt.textContent=p.label;lbl.appendChild(lblTxt);
+      var addBtn=document.createElement('button');addBtn.className='person-add-btn';addBtn.textContent='+ 추가';
+      (function(k,mk,ml,pk){addBtn.addEventListener('click',function(e){e.stopPropagation();openMealPerson(k,mk,ml,pk);});})(key,meal.key,meal.label,p.key);
+      lbl.appendChild(addBtn);box.appendChild(lbl);
       var tl=document.createElement('div');tl.className='tag-list';
       if(!items.length){var em=document.createElement('span');em.className='empty-txt';em.textContent='-';tl.appendChild(em);}
       else{items.forEach(function(name,idx){var tag=document.createElement('div');tag.className='food-tag';tag.textContent=name;tag.onclick=(function(k,mk,pk,n,i){return function(){askDel('food',k,n,0,i,mk,pk);};})(key,meal.key,p.key,name,idx);tl.appendChild(tag);});}
@@ -545,6 +754,14 @@ function render(){
 document.getElementById('inp-a').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-b').focus();});
 document.getElementById('inp-b').addEventListener('keydown',function(e){if(e.key==='Enter')saveMeal();});
 document.getElementById('inp-en').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-ea').focus();});
+document.addEventListener('keydown',function(e){
+  var inp=document.getElementById('cat-new-input');
+  if(inp&&document.activeElement===inp&&e.key==='Enter'){addCatItem();}
+  var inp2a=document.getElementById('meal-new-input-a');
+  if(inp2a&&document.activeElement===inp2a&&e.key==='Enter'){addMealItem('a');}
+  var inp2b=document.getElementById('meal-new-input-b');
+  if(inp2b&&document.activeElement===inp2b&&e.key==='Enter'){addMealItem('b');}
+});
 document.getElementById('inp-ea').addEventListener('input',function(){
   var raw=this.value.replace(/[^0-9]/g,'');
   if(raw===''){this.value='';return;}
