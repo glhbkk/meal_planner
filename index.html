@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj4KICA8cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMkQ3QTNBIi8+CiAgPHJlY3QgeD0iNDQiIHk9IjM2IiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjEzMCIgcng9IjEyIiBmaWxsPSIjZmZmIi8+CiAgPHJlY3QgeD0iNDQiIHk9IjM2IiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjM2IiByeD0iMTIiIGZpbGw9IiNGNUE2MjMiLz4KICA8cmVjdCB4PSI0NCIgeT0iNjAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMTIiIGZpbGw9IiNGNUE2MjMiLz4KICA8cmVjdCB4PSI2MCIgeT0iOTIiIHdpZHRoPSI3MiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIxMTAiIHdpZHRoPSI1NiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIxMjgiIHdpZHRoPSI2NCIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxjaXJjbGUgY3g9IjE0MCIgY3k9IjE0OCIgcj0iMjgiIGZpbGw9IiMyRDdBM0EiLz4KICA8dGV4dCB4PSIxNDAiIHk9IjE1NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyOCIgZmlsbD0id2hpdGUiPuKCqTwvdGV4dD4KPC9zdmc+"/>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj4KICA8cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMkQ3QTNBIi8+CiAgPHJlY3QgeD0iNDQiIHk9IjM2IiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjEzMCIgcng9IjEyIiBmaWxsPSIjZmZmIi8+CiAgPHJlY3QgeD0iNDQiIHk9IjM2IiB3aWR0aD0iMTA0IiBoZWlnaHQ9IjM2IiByeD0iMTIiIGZpbGw9IiNGNUE2MjMiLz4KICA8cmVjdCB4PSI0NCIgeT0iNjAiIHdpZHRoPSIxMDQiIGhlaWdodD0iMTIiIGZpbGw9IiNGNUE2MjMiLz4KICA8cmVjdCB4PSI2MCIgeT0iOTIiIHdpZHRoPSI3MiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIxMTAiIHdpZHRoPSI1NiIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxyZWN0IHg9IjYwIiB5PSIxMjgiIHdpZHRoPSI2NCIgaGVpZ2h0PSI4IiByeD0iNCIgZmlsbD0iI0UwRTBFMCIvPgogIDxjaXJjbGUgY3g9IjE0MCIgY3k9IjE0OCIgcj0iMjgiIGZpbGw9IiMyRDdBM0EiLz4KICA8dGV4dCB4PSIxNDAiIHk9IjE1NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyOCIgZmlsbD0id2hpdGUiPuKCqTwvdGV4dD4KPC9zdmc+"/>
   <title>다뱅가계부</title>
-  <!-- ver5.6 -->
+  <!-- ver5.7 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -391,6 +391,7 @@
   <div class="todo-header">
     <button class="todo-back" onclick="closeTodo()">‹</button>
     <div class="todo-title">☑️ 할일 목록</div>
+    <button onclick="clearAllTodo()" style="font-size:12px;color:#E24B4A;background:none;border:1px solid #E24B4A;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">전체삭제</button>
   </div>
   <div class="todo-body">
     <div class="todo-input-row">
@@ -413,6 +414,17 @@
     <div class="todo-input-row">
       <input type="text" class="todo-input" id="cart-input" placeholder="장보기 항목을 입력하세요" maxlength="50"/>
       <button class="todo-add-btn" onclick="addCart()">추가</button>
+    </div>
+    <div style="display:flex;align-items:center;margin-bottom:6px;">
+      <div style="font-size:12px;color:#aaa;">자주 사는 항목</div>
+      <button class="cat-manage-btn" onclick="toggleCartEdit()" id="cart-edit-btn">편집</button>
+    </div>
+    <div class="cat-btns" id="cart-quick-btns"></div>
+    <div id="cart-quick-add-row" style="display:none;margin-bottom:10px;">
+      <div class="cat-add-row">
+        <input type="text" class="cat-add-input" id="cart-quick-input" placeholder="항목 입력" maxlength="15"/>
+        <button class="cat-add-submit" onclick="addCartQuick()">추가</button>
+      </div>
     </div>
     <div class="todo-count" id="cart-count"></div>
     <div class="todo-list" id="cart-list"></div>
@@ -889,6 +901,10 @@ todoRef.on('value', function(snapshot) {
   renderTodos();
 });
 
+function clearAllTodo(){
+  if(todos.length===0) return;
+  todoRef.remove();
+}
 function openTodo(){
   document.getElementById('todo-page').style.display='block';
   pushPage('todo');
@@ -939,6 +955,63 @@ function renderTodos(){
   });
 }
 
+/* 장보기 자주쓰는 항목 */
+var cartQuickRef = db.ref('cartquick');
+var cartQuickItems = [];
+var cartQuickEditMode = false;
+var DEFAULT_CART_QUICK = ['우유','계란','두부','라면','쌀','김치','고기','과일'];
+
+cartQuickRef.on('value', function(snapshot){
+  var val = snapshot.val();
+  cartQuickItems = (val&&val.list&&val.list.length) ? val.list : DEFAULT_CART_QUICK.slice();
+  renderCartQuickBtns();
+});
+
+function renderCartQuickBtns(){
+  var wrap = document.getElementById('cart-quick-btns');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  cartQuickItems.forEach(function(c){
+    var btn = document.createElement('button');
+    btn.className = 'cat-btn';
+    btn.textContent = c;
+    if(cartQuickEditMode){
+      var del = document.createElement('span');
+      del.className = 'cat-del-btn';
+      del.textContent = '✕';
+      del.onclick = (function(name){ return function(e){ e.stopPropagation(); deleteCartQuick(name); }; })(c);
+      btn.appendChild(del);
+    } else {
+      btn.onclick = (function(name){ return function(){
+        document.getElementById('cart-input').value = name;
+        addCart();
+      }; })(c);
+    }
+    wrap.appendChild(btn);
+  });
+}
+
+function toggleCartEdit(){
+  cartQuickEditMode = !cartQuickEditMode;
+  document.getElementById('cart-quick-add-row').style.display = cartQuickEditMode ? 'block' : 'none';
+  document.getElementById('cart-edit-btn').textContent = cartQuickEditMode ? '완료' : '편집';
+  renderCartQuickBtns();
+}
+
+function addCartQuick(){
+  var val = document.getElementById('cart-quick-input').value.trim();
+  if(!val) return;
+  if(cartQuickItems.indexOf(val)!==-1){ document.getElementById('cart-quick-input').value=''; return; }
+  cartQuickItems.push(val);
+  cartQuickRef.set({list:cartQuickItems});
+  document.getElementById('cart-quick-input').value='';
+}
+
+function deleteCartQuick(name){
+  cartQuickItems = cartQuickItems.filter(function(c){ return c!==name; });
+  cartQuickRef.set({list:cartQuickItems});
+}
+
 /* 장바구니 */
 var cartRef = db.ref('cartitems');
 var cartItems = [];
@@ -956,6 +1029,12 @@ function openCart(){
 }
 function closeCart(){
   document.getElementById('cart-page').style.display='none';
+  if(cartQuickEditMode){
+    cartQuickEditMode=false;
+    var row=document.getElementById('cart-quick-add-row');if(row)row.style.display='none';
+    var eb=document.getElementById('cart-edit-btn');if(eb)eb.textContent='편집';
+    renderCartQuickBtns();
+  }
 }
 
 function addCart(){
@@ -1006,6 +1085,10 @@ function renderCart(){
 
 document.getElementById('cart-input').addEventListener('keydown', function(e){
   if(e.key==='Enter') addCart();
+});
+document.addEventListener('keydown', function(e){
+  var qi = document.getElementById('cart-quick-input');
+  if(qi && document.activeElement===qi && e.key==='Enter') addCartQuick();
 });
 
 document.getElementById('todo-input').addEventListener('keydown', function(e){
