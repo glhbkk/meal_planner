@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="다뱅 Home"/>
     <meta name="msapplication-TileColor" content="#2D7A3A"/>
   <title>다뱅 Home</title>
-  <!-- ver8.1 -->
+  <!-- ver8.4 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -168,6 +168,14 @@
     body.dark .travel-status.warn{background:#3a2500;border-color:#cc7700;color:#FFB74D;}
     body.dark .travel-status.ok{background:#1a3a1a;border-color:#4CAF50;color:#81C784;}
     .travel-status-icon{font-size:18px;flex-shrink:0;}
+    .todo-item{transition:transform 0.15s, box-shadow 0.15s;}
+    .todo-item.dragging{opacity:0.3;border:2px dashed #185FA5;transform:scale(0.97);box-shadow:none;}
+    .todo-item.drag-over{border-top:3px solid #185FA5;transform:translateY(4px);background:#E6F1FB;}
+    body.dark .todo-item.drag-over{background:#1a3a5a;}
+    .drag-handle{font-size:18px;color:#bbb;cursor:grab;padding:0 6px;flex-shrink:0;user-select:none;touch-action:none;}
+    .drag-handle:active{cursor:grabbing;color:#185FA5;}
+    body.dark .drag-handle{color:#555;}
+    body.dark .drag-handle:active{color:#5BA8F5;}
     .sync-bar{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 16px;font-size:11px;}
     .sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;}
     .sync-dot.on{background:#639922;}
@@ -1018,16 +1026,19 @@ function renderTravelList(){
     list.innerHTML = '<div class="todo-empty">'+currentTravelMember+'의 준비물을 추가해보세요 🧳</div>';
     return;
   }
+  var memberRef = travelRef.child(currentTravelMember);
   items.forEach(function(item){
     var el = document.createElement('div');
     el.className = 'todo-item' + (item.done ? ' done' : '');
     el.innerHTML =
+      '<div class="drag-handle">☰</div>'+
       '<div class="todo-checkbox"><span class="todo-check-icon">✓</span></div>'+
       '<div class="todo-text">'+item.text+'</div>'+
       '<button class="todo-del">✕</button>';
     el.querySelector('.todo-checkbox').onclick = (function(m,id,done){ return function(e){ e.stopPropagation(); toggleTravelItem(m,id,done); }; })(currentTravelMember, item.id, item.done);
     el.querySelector('.todo-text').onclick = (function(m,id,done){ return function(){ toggleTravelItem(m,id,done); }; })(currentTravelMember, item.id, item.done);
     el.querySelector('.todo-del').onclick = (function(m,id){ return function(e){ e.stopPropagation(); deleteTravelItem(m,id); }; })(currentTravelMember, item.id);
+    makeDraggable(el, item.id, items, memberRef, list);
     list.appendChild(el);
   });
   // 토글 버튼 업데이트
@@ -1167,16 +1178,97 @@ function renderTodos(){
     list.innerHTML = '<div class="todo-empty">To-Do 리스트를 추가해보세요 😊</div>';
     return;
   }
+  var dragSrcId = null;
   todos.forEach(function(todo){
     var item = document.createElement('div');
     item.className = 'todo-item' + (todo.done ? ' done' : '');
+    item.draggable = true;
+    item.dataset.id = todo.id;
     item.innerHTML =
+      '<div class="drag-handle">☰</div>'+
       '<div class="todo-checkbox"><span class="todo-check-icon">✓</span></div>'+
       '<div class="todo-text">'+todo.text+'</div>'+
       '<button class="todo-del">✕</button>';
     item.querySelector('.todo-checkbox').onclick = (function(id,done){ return function(e){ e.stopPropagation(); toggleTodo(id,done); }; })(todo.id, todo.done);
     item.querySelector('.todo-text').onclick = (function(id,done){ return function(){ toggleTodo(id,done); }; })(todo.id, todo.done);
     item.querySelector('.todo-del').onclick = (function(id){ return function(e){ e.stopPropagation(); deleteTodo(id); }; })(todo.id);
+
+    item.addEventListener('dragstart', function(e){
+      dragSrcId = todo.id;
+      setTimeout(function(){ item.classList.add('dragging'); }, 0);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    item.addEventListener('dragend', function(){
+      item.classList.remove('dragging');
+      list.querySelectorAll('.todo-item').forEach(function(el){ el.classList.remove('drag-over'); });
+    });
+    item.addEventListener('dragover', function(e){
+      e.preventDefault();
+      list.querySelectorAll('.todo-item').forEach(function(el){ el.classList.remove('drag-over'); });
+      if(todo.id !== dragSrcId) item.classList.add('drag-over');
+    });
+    item.addEventListener('drop', function(e){
+      e.preventDefault();
+      if(dragSrcId && dragSrcId !== todo.id){
+        var srcIdx = todos.findIndex(function(t){ return t.id === dragSrcId; });
+        var dstIdx = todos.findIndex(function(t){ return t.id === todo.id; });
+        var reordered = todos.slice();
+        var removed = reordered.splice(srcIdx, 1)[0];
+        reordered.splice(dstIdx, 0, removed);
+        // createdAt 재정렬
+        var now = Date.now();
+        var updates = {};
+        reordered.forEach(function(t, i){
+          updates[t.id + '/createdAt'] = now + i;
+        });
+        todoRef.update(updates);
+      }
+    });
+
+    // 터치 드래그 (모바일)
+    var touchStartY = 0, touchItem = null;
+    item.querySelector('.drag-handle').addEventListener('touchstart', function(e){
+      touchStartY = e.touches[0].clientY;
+      touchItem = item;
+      item.classList.add('dragging');
+      dragSrcId = todo.id;
+    }, {passive:true});
+    item.querySelector('.drag-handle').addEventListener('touchmove', function(e){
+      e.preventDefault();
+      var touch = e.touches[0];
+      var els = list.querySelectorAll('.todo-item');
+      els.forEach(function(el){ el.classList.remove('drag-over'); });
+      var target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if(target){
+        var targetItem = target.closest('.todo-item');
+        if(targetItem && targetItem !== item) targetItem.classList.add('drag-over');
+      }
+    }, {passive:false});
+    item.querySelector('.drag-handle').addEventListener('touchend', function(e){
+      item.classList.remove('dragging');
+      var touch = e.changedTouches[0];
+      var target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if(target){
+        var targetItem = target.closest('.todo-item');
+        if(targetItem && targetItem !== item){
+          var targetId = targetItem.dataset.id;
+          var srcIdx = todos.findIndex(function(t){ return t.id === dragSrcId; });
+          var dstIdx = todos.findIndex(function(t){ return t.id === targetId; });
+          if(srcIdx !== -1 && dstIdx !== -1){
+            var reordered = todos.slice();
+            var removed = reordered.splice(srcIdx, 1)[0];
+            reordered.splice(dstIdx, 0, removed);
+            var now = Date.now();
+            var updates = {};
+            reordered.forEach(function(t, i){ updates[t.id + '/createdAt'] = now + i; });
+            todoRef.update(updates);
+          }
+        }
+      }
+      list.querySelectorAll('.todo-item').forEach(function(el){ el.classList.remove('drag-over'); });
+      dragSrcId = null;
+    });
+
     list.appendChild(item);
   });
 }
@@ -1236,6 +1328,81 @@ function addCartQuick(){
 function deleteCartQuick(name){
   cartQuickItems = cartQuickItems.filter(function(c){ return c!==name; });
   cartQuickRef.set({list:cartQuickItems});
+}
+
+/* 드래그 공통 함수 */
+function makeDraggable(item, itemId, items, ref, list){
+  item.draggable = true;
+  item.dataset.id = itemId;
+
+  item.addEventListener('dragstart', function(e){
+    item._dragSrcId = itemId;
+    list._dragSrcId = itemId;
+    setTimeout(function(){ item.classList.add('dragging'); }, 0);
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  item.addEventListener('dragend', function(){
+    item.classList.remove('dragging');
+    list.querySelectorAll('.todo-item').forEach(function(el){ el.classList.remove('drag-over'); });
+  });
+  item.addEventListener('dragover', function(e){
+    e.preventDefault();
+    list.querySelectorAll('.todo-item').forEach(function(el){ el.classList.remove('drag-over'); });
+    if(list._dragSrcId !== itemId) item.classList.add('drag-over');
+  });
+  item.addEventListener('drop', function(e){
+    e.preventDefault();
+    var srcId = list._dragSrcId;
+    if(srcId && srcId !== itemId){
+      var srcIdx = items.findIndex(function(t){ return t.id === srcId; });
+      var dstIdx = items.findIndex(function(t){ return t.id === itemId; });
+      var reordered = items.slice();
+      var removed = reordered.splice(srcIdx, 1)[0];
+      reordered.splice(dstIdx, 0, removed);
+      var now = Date.now();
+      var updates = {};
+      reordered.forEach(function(t, i){ updates[t.id + '/createdAt'] = now + i; });
+      ref.update(updates);
+    }
+  });
+
+  var handle = item.querySelector('.drag-handle');
+  if(!handle) return;
+  handle.addEventListener('touchstart', function(e){
+    list._dragSrcId = itemId;
+    item.classList.add('dragging');
+  }, {passive:true});
+  handle.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    var touch = e.touches[0];
+    list.querySelectorAll('.todo-item').forEach(function(el){ el.classList.remove('drag-over'); });
+    var target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if(target){ var ti = target.closest('.todo-item'); if(ti && ti !== item) ti.classList.add('drag-over'); }
+  }, {passive:false});
+  handle.addEventListener('touchend', function(e){
+    item.classList.remove('dragging');
+    var touch = e.changedTouches[0];
+    var target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if(target){
+      var ti = target.closest('.todo-item');
+      if(ti && ti !== item){
+        var targetId = ti.dataset.id;
+        var srcIdx = items.findIndex(function(t){ return t.id === list._dragSrcId; });
+        var dstIdx = items.findIndex(function(t){ return t.id === targetId; });
+        if(srcIdx !== -1 && dstIdx !== -1){
+          var reordered = items.slice();
+          var removed = reordered.splice(srcIdx, 1)[0];
+          reordered.splice(dstIdx, 0, removed);
+          var now = Date.now();
+          var updates = {};
+          reordered.forEach(function(t, i){ updates[t.id + '/createdAt'] = now + i; });
+          ref.update(updates);
+        }
+      }
+    }
+    list.querySelectorAll('.todo-item').forEach(function(el){ el.classList.remove('drag-over'); });
+    list._dragSrcId = null;
+  });
 }
 
 /* 장바구니 */
@@ -1298,12 +1465,14 @@ function renderCart(){
     var el = document.createElement('div');
     el.className = 'todo-item' + (item.done ? ' done' : '');
     el.innerHTML =
+      '<div class="drag-handle">☰</div>'+
       '<div class="todo-checkbox"><span class="todo-check-icon">✓</span></div>'+
       '<div class="todo-text">'+item.text+'</div>'+
       '<button class="todo-del">✕</button>';
     el.querySelector('.todo-checkbox').onclick = (function(id,done){ return function(e){ e.stopPropagation(); toggleCart(id,done); }; })(item.id, item.done);
     el.querySelector('.todo-text').onclick = (function(id,done){ return function(){ toggleCart(id,done); }; })(item.id, item.done);
     el.querySelector('.todo-del').onclick = (function(id){ return function(e){ e.stopPropagation(); deleteCart(id); }; })(item.id);
+    makeDraggable(el, item.id, cartItems, cartRef, list);
     list.appendChild(el);
   });
 }
