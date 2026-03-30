@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="다뱅 Home"/>
     <meta name="msapplication-TileColor" content="#2D7A3A"/>
   <title>다뱅 Home</title>
-  <!-- ver9.1 -->
+  <!-- ver9.2 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -793,15 +793,24 @@ function openMealPerson(dateStr,mealKey,lbl,person){
 }
 function saveMeal(){
   if(!mealCell) return;
-  var s=mealCell.dateStr, mk=mealCell.mealKey;
-  var p=mealCell.person;
-  // 현재 포커스된 입력창 확인
-  var active=document.activeElement;
-  if(active && (active.id==='inp-a' || active.id==='inp-b')){
-    p = active.id==='inp-a' ? 'a' : 'b';
+  var s=mealCell.dateStr, mk=mealCell.mealKey, p=mealCell.person;
+  // p가 없으면 현재 열려있는 섹션으로 판단
+  if(!p){
+    var secA=document.getElementById('meal-section-a');
+    var secB=document.getElementById('meal-section-b');
+    if(secA && secA.style.display==='block') p='a';
+    else if(secB && secB.style.display==='block') p='b';
   }
-  var v=document.getElementById('inp-'+p).value.trim();
-  if(!v){ document.getElementById('inp-'+p).focus(); return; }
+  if(!p) return;
+  var inp=document.getElementById('inp-'+p);
+  // cloneNode로 교체된 경우 새 inp 찾기
+  if(!inp){
+    var section=document.getElementById('meal-section-'+p);
+    if(section) inp=section.querySelector('input[placeholder="직접 입력"]');
+  }
+  if(!inp) return;
+  var v=inp.value.trim();
+  if(!v){ inp.focus(); return; }
   if(!D[s])D[s]={};
   if(!D[s][mk])D[s][mk]={a:[],b:[]};
   D[s][mk][p].push(v);
@@ -935,8 +944,12 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-// inp-a 기본 이벤트 (openMealPerson에서 재등록됨)
 document.getElementById('inp-a').addEventListener('keydown',function(e){
+  e.stopPropagation();
+  if(e.key==='Enter'){ e.preventDefault(); saveMeal(); }
+  if(e.key==='Escape') closeMeal();
+});
+document.getElementById('meal-section-b').addEventListener('keydown',function(e){
   e.stopPropagation();
   if(e.key==='Enter'){ e.preventDefault(); saveMeal(); }
   if(e.key==='Escape') closeMeal();
