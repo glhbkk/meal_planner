@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="다뱅 Home"/>
     <meta name="msapplication-TileColor" content="#2D7A3A"/>
   <title>다뱅 Home</title>
-  <!-- ver9.6 -->
+  <!-- ver9.7 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -904,7 +904,7 @@ function render(){
       var lbl=document.createElement('div');lbl.className='person-lbl';
       var lblTxt=document.createElement('span');lblTxt.textContent=p.label;lbl.appendChild(lblTxt);
       var addBtn=document.createElement('button');addBtn.className='person-add-btn';addBtn.textContent='+ 추가';
-      (function(k,mk,ml,pk){addBtn.addEventListener('click',function(e){e.stopPropagation();openMealPerson(k,mk,ml,pk);});})(key,meal.key,meal.label,p.key);
+      addBtn.setAttribute('onclick','event.stopPropagation();openMealPerson("'+key+'","'+meal.key+'","'+meal.label+'","'+p.key+'")');
       lbl.appendChild(addBtn);box.appendChild(lbl);
       var tl=document.createElement('div');tl.className='tag-list';
       if(!items.length){var em=document.createElement('span');em.className='empty-txt';em.textContent='-';tl.appendChild(em);}
