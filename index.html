@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="다뱅 Home"/>
     <meta name="msapplication-TileColor" content="#2D7A3A"/>
   <title>다뱅 Home</title>
-  <!-- ver9.4 -->
+  <!-- ver9.5 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -431,6 +431,9 @@
     </div>
     <div class="sheet-sub" id="meal-sub" style="display:none;"></div>
 
+    <!-- 숨김 호환용 -->
+    <div id="meal-section-a" style="display:none;"></div>
+    <div id="meal-section-b" style="display:none;"></div>
     <!-- 자주먹는 음식 버튼 -->
     <div class="cat-btns" id="meal-btns-cur" style="margin-bottom:6px;"></div>
     <!-- 편집 입력창 -->
@@ -739,34 +742,9 @@ document.getElementById('add-exp-btn').onclick=function(e){
 };
 
 function openMeal(dateStr,mealKey,lbl){
-  mealCell={dateStr:dateStr,mealKey:mealKey,person:null};
-  document.getElementById('meal-title').textContent=lbl;
-  document.getElementById('meal-sub').textContent='각자 먹을 음식을 입력하세요';
-  document.getElementById('meal-inp-cur').value='';
-  
-  document.getElementById('meal-section-a').style.display='none';
-  document.getElementById('meal-section-b').style.display='none';
-  
-  renderMealBtns2();
-  document.getElementById('meal-overlay').style.display='flex';
-  setTimeout(function(){document.getElementById('inp-a2').focus();},100);
+  openMealPerson(dateStr,mealKey,lbl,'a');
 }
-function renderMealBtns2(){
-  ['a','b'].forEach(function(p){
-    var wrap=document.getElementById('meal-btns-'+p+'2');
-    if(!wrap)return;
-    wrap.innerHTML='';
-    getMealCats(p).forEach(function(c){
-      var btn=document.createElement('button');btn.className='cat-btn';btn.textContent=c;
-      btn.onclick=(function(name,pk,b){return function(){
-        document.querySelectorAll('#meal-btns-'+pk+'2 .cat-btn').forEach(function(x){x.classList.remove('selected');});
-        b.classList.add('selected');
-        document.getElementById('inp-'+pk+'2').value=name;
-      };})(c,p,btn);
-      wrap.appendChild(btn);
-    });
-  });
-}
+
 function openMealPerson(dateStr,mealKey,lbl,person){
   mealCell={dateStr:dateStr,mealKey:mealKey,person:person};
   document.getElementById('meal-title').textContent=lbl;
