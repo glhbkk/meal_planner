@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="다뱅 Home"/>
     <meta name="msapplication-TileColor" content="#2D7A3A"/>
   <title>다뱅 Home</title>
-  <!-- ver8.5 -->
+  <!-- ver10.5 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -450,8 +450,9 @@
           <button class="cat-add-submit" onclick="addMealItem('b')">추가</button>
         </div>
       </div>
-      <input type="text" id="inp-b" placeholder="직접 입력" maxlength="30" style="width:100%;padding:10px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;margin-top:6px;"/>
     </div>
+    <!-- inp-b는 섹션 밖에 배치 (display:none 안에 있으면 버튼 클릭시 값 소실) -->
+    <input type="text" id="inp-b" placeholder="직접 입력" maxlength="30" style="display:none;width:100%;padding:10px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;margin-top:6px;"/>
 
     <div class="sheet-btns">
       <button class="btn-save" onclick="saveMeal()">추가하기</button>
@@ -785,6 +786,8 @@ function openMealPerson(dateStr,mealKey,lbl,person){
   document.getElementById('meal-section-b').style.display=(person==='b')?'block':'none';
   document.getElementById('meal-edit-wrap-a').style.display=(person==='a')?'block':'none';
   document.getElementById('meal-edit-wrap-b').style.display=(person==='b')?'block':'none';
+  document.getElementById('inp-a').style.display=(person==='a')?'block':'none';
+  document.getElementById('inp-b').style.display=(person==='b')?'block':'none';
   document.getElementById('inp-'+person).value='';
   renderMealBtns(person);
   document.getElementById('meal-overlay').style.display='flex';
@@ -916,8 +919,15 @@ function render(){
   });
 }
 
-document.getElementById('inp-a').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-b').focus();});
-document.getElementById('inp-b').addEventListener('keydown',function(e){if(e.key==='Enter')saveMeal();});
+// 식단 입력창 키이벤트 - overlay에 위임 (display:none 섹션 문제 해결)
+document.getElementById('meal-overlay').addEventListener('keydown',function(e){
+  var id = e.target.id;
+  if(id==='inp-a'||id==='inp-b'){
+    e.stopPropagation();
+    if(e.key==='Enter'){ e.preventDefault(); saveMeal(); }
+    if(e.key==='Escape'){ e.preventDefault(); closeMeal(); }
+  }
+});
 document.getElementById('inp-en').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-ea').focus();});
 document.addEventListener('keydown',function(e){
   var inp=document.getElementById('cat-new-input');
