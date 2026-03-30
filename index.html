@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="다뱅 Home"/>
     <meta name="msapplication-TileColor" content="#2D7A3A"/>
   <title>다뱅 Home</title>
-  <!-- ver9.5 -->
+  <!-- ver9.6 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -431,20 +431,27 @@
     </div>
     <div class="sheet-sub" id="meal-sub" style="display:none;"></div>
 
-    <!-- 숨김 호환용 -->
-    <div id="meal-section-a" style="display:none;"></div>
-    <div id="meal-section-b" style="display:none;"></div>
-    <!-- 자주먹는 음식 버튼 -->
-    <div class="cat-btns" id="meal-btns-cur" style="margin-bottom:6px;"></div>
-    <!-- 편집 입력창 -->
-    <div id="meal-edit-quick-row" style="display:none;margin-bottom:8px;">
-      <div class="cat-add-row">
-        <input type="text" class="cat-add-input" id="meal-new-input-cur" placeholder="음식 이름 입력" maxlength="15"/>
-        <button class="cat-add-submit" id="meal-quick-submit" onclick="addMealItemCur()">추가</button>
+    <div id="meal-section-a" style="display:none;margin-bottom:10px;">
+      <div class="cat-btns" id="meal-btns-a"></div>
+      <div id="meal-add-row-a" style="display:none;">
+        <div class="cat-add-row">
+          <input type="text" class="cat-add-input" id="meal-new-input-a" placeholder="음식 이름 입력" maxlength="15"/>
+          <button class="cat-add-submit" style="background:#639922;" onclick="addMealItem('a')">추가</button>
+        </div>
       </div>
+      <input type="text" id="inp-a" placeholder="직접 입력" maxlength="30" style="width:100%;padding:10px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;margin-top:6px;"/>
     </div>
-    <!-- 단일 입력창 -->
-    <input type="text" id="meal-inp-cur" placeholder="직접 입력" maxlength="30" style="width:100%;padding:10px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;margin-top:4px;"/>
+
+    <div id="meal-section-b" style="display:none;margin-bottom:10px;">
+      <div class="cat-btns" id="meal-btns-b"></div>
+      <div id="meal-add-row-b" style="display:none;">
+        <div class="cat-add-row">
+          <input type="text" class="cat-add-input" id="meal-new-input-b" placeholder="음식 이름 입력" maxlength="15"/>
+          <button class="cat-add-submit" onclick="addMealItem('b')">추가</button>
+        </div>
+      </div>
+      <input type="text" id="inp-b" placeholder="직접 입력" maxlength="30" style="width:100%;padding:10px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;margin-top:6px;"/>
+    </div>
 
     <div class="sheet-btns">
       <button class="btn-save" onclick="saveMeal()">추가하기</button>
@@ -615,7 +622,7 @@ function toggleMealEdit(person) {
   if(person==='a'){ mealEditModeA=!mealEditModeA; }
   else { mealEditModeB=!mealEditModeB; }
   var editMode = getMealEditMode(person);
-  document.getElementById('meal-edit-quick-row').style.display = editMode ? 'block' : 'none';
+  document.getElementById('meal-add-row-'+person).style.display = editMode ? 'block' : 'none';
   var btnId = person==='a' ? 'meal-edit-btn-a' : 'meal-edit-btn-b2';
   var eb = document.getElementById(btnId); if(eb) eb.textContent = editMode ? '완료' : '편집';
   renderMealBtns(person);
@@ -742,34 +749,52 @@ document.getElementById('add-exp-btn').onclick=function(e){
 };
 
 function openMeal(dateStr,mealKey,lbl){
-  openMealPerson(dateStr,mealKey,lbl,'a');
+  mealCell={dateStr:dateStr,mealKey:mealKey,person:null};
+  document.getElementById('meal-title').textContent=lbl;
+  document.getElementById('meal-sub').textContent='각자 먹을 음식을 입력하세요';
+  document.getElementById('inp-a2').value='';
+  document.getElementById('inp-b2').value='';
+  document.getElementById('meal-section-a').style.display='none';
+  document.getElementById('meal-section-b').style.display='none';
+  
+  renderMealBtns2();
+  document.getElementById('meal-overlay').style.display='flex';
+  setTimeout(function(){document.getElementById('inp-a2').focus();},100);
 }
-
+function renderMealBtns2(){
+  ['a','b'].forEach(function(p){
+    var wrap=document.getElementById('meal-btns-'+p+'2');
+    if(!wrap)return;
+    wrap.innerHTML='';
+    getMealCats(p).forEach(function(c){
+      var btn=document.createElement('button');btn.className='cat-btn';btn.textContent=c;
+      btn.onclick=(function(name,pk,b){return function(){
+        document.querySelectorAll('#meal-btns-'+pk+'2 .cat-btn').forEach(function(x){x.classList.remove('selected');});
+        b.classList.add('selected');
+        document.getElementById('inp-'+pk+'2').value=name;
+      };})(c,p,btn);
+      wrap.appendChild(btn);
+    });
+  });
+}
 function openMealPerson(dateStr,mealKey,lbl,person){
   mealCell={dateStr:dateStr,mealKey:mealKey,person:person};
   document.getElementById('meal-title').textContent=lbl;
-  document.getElementById('meal-inp-cur').value='';
-  document.getElementById('meal-edit-quick-row').style.display='none';
-  var ebA=document.getElementById('meal-edit-wrap-a');
-  var ebB=document.getElementById('meal-edit-wrap-b');
-  if(ebA) ebA.style.display=(person==='a')?'block':'none';
-  if(ebB) ebB.style.display=(person==='b')?'block':'none';
-  var btnA=document.getElementById('meal-edit-btn-a');if(btnA)btnA.textContent='편집';
-  var btnB=document.getElementById('meal-edit-btn-b2');if(btnB)btnB.textContent='편집';
-  mealEditModeA=false; mealEditModeB=false;
-  renderMealBtnsNew(person);
+  document.getElementById('meal-sub').textContent='';
+  document.getElementById('meal-section-a').style.display=(person==='a')?'block':'none';
+  document.getElementById('meal-section-b').style.display=(person==='b')?'block':'none';
+  document.getElementById('meal-edit-wrap-a').style.display=(person==='a')?'block':'none';
+  document.getElementById('meal-edit-wrap-b').style.display=(person==='b')?'block':'none';
+  document.getElementById('inp-'+person).value='';
+  renderMealBtns(person);
   document.getElementById('meal-overlay').style.display='flex';
   pushPage('meal');
-  setTimeout(function(){ document.getElementById('meal-inp-cur').focus(); },150);
+  setTimeout(function(){ document.getElementById('inp-'+person).focus(); },150);
 }
 function saveMeal(){
-  if(!mealCell) return;
   var s=mealCell.dateStr, mk=mealCell.mealKey, p=mealCell.person;
-  if(!p) return;
-  var inp=document.getElementById('meal-inp-cur');
-  if(!inp) return;
-  var v=inp.value.trim();
-  if(!v){ inp.focus(); return; }
+  var v=document.getElementById('inp-'+p).value.trim();
+  if(!v){ document.getElementById('inp-'+p).focus(); return; }
   if(!D[s])D[s]={};
   if(!D[s][mk])D[s][mk]={a:[],b:[]};
   D[s][mk][p].push(v);
@@ -891,8 +916,10 @@ function render(){
   });
 }
 
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape'){
+document.getElementById('inp-a').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-b').focus();});
+document.getElementById('inp-b').addEventListener('keydown',function(e){if(e.key==='Enter')saveMeal();});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
     if(document.getElementById('cfm-popup').style.display!=='none') closeCfm();
     else if(document.getElementById('meal-overlay').style.display!=='none') closeMeal();
     else if(document.getElementById('exp-overlay').style.display!=='none') closeExp();
@@ -901,12 +928,6 @@ document.addEventListener('keydown', function(e){
     else if(document.getElementById('cart-page').style.display!=='none') closeCart();
     else if(document.getElementById('travel-page').style.display!=='none') closeTravel();
   }
-});
-
-document.getElementById('meal-inp-cur').addEventListener('keydown',function(e){
-  e.stopPropagation();
-  if(e.key==='Enter'){ e.preventDefault(); saveMeal(); }
-  if(e.key==='Escape') closeMeal();
 });
 document.getElementById('inp-en').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-ea').focus();});
 document.addEventListener('keydown',function(e){
