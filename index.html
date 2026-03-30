@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="다뱅 Home"/>
     <meta name="msapplication-TileColor" content="#2D7A3A"/>
   <title>다뱅 Home</title>
-  <!-- ver8.6 -->
+  <!-- ver8.7 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -915,6 +915,18 @@ function render(){
     view.appendChild(sec);
   });
 }
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    if(document.getElementById('cfm-popup').style.display!=='none') closeCfm();
+    else if(document.getElementById('meal-overlay').style.display!=='none') closeMeal();
+    else if(document.getElementById('exp-overlay').style.display!=='none') closeExp();
+    else if(document.getElementById('stats-page').style.display!=='none') closeStats();
+    else if(document.getElementById('todo-page').style.display!=='none') closeTodo();
+    else if(document.getElementById('cart-page').style.display!=='none') closeCart();
+    else if(document.getElementById('travel-page').style.display!=='none') closeTravel();
+  }
+});
 
 document.getElementById('inp-a').addEventListener('keydown',function(e){if(e.key==='Enter')saveMeal();});
 document.getElementById('inp-b').addEventListener('keydown',function(e){if(e.key==='Enter')saveMeal();});
