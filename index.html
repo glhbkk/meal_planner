@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="다뱅 Home"/>
     <meta name="msapplication-TileColor" content="#2D7A3A"/>
   <title>다뱅 Home</title>
-  <!-- ver8.4 -->
+  <!-- ver8.5 -->
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{width:100%;height:100%;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
@@ -790,6 +790,15 @@ function openMealPerson(dateStr,mealKey,lbl,person){
   document.getElementById('meal-overlay').style.display='flex';
   pushPage('meal');
   setTimeout(function(){ document.getElementById('inp-'+person).focus(); },150);
+}
+function saveMeal(){
+  var s=mealCell.dateStr, mk=mealCell.mealKey, p=mealCell.person;
+  var v=document.getElementById('inp-'+p).value.trim();
+  if(!v){ document.getElementById('inp-'+p).focus(); return; }
+  if(!D[s])D[s]={};
+  if(!D[s][mk])D[s][mk]={a:[],b:[]};
+  D[s][mk][p].push(v);
+  save(); closeMeal();
 }
 function closeMeal(){
   document.getElementById('meal-overlay').style.display='none';
