@@ -391,6 +391,55 @@
 </div>
 
 <!-- 여행 준비물 페이지 -->
+<!-- 할일 페이지 -->
+<div class="todo-page" id="todo-page" style="display:none;">
+  <div class="todo-header">
+    <button class="todo-back" onclick="closeTodo()">‹</button>
+    <div class="todo-title">☑️ To-Do 리스트</div>
+    <button onclick="clearAllTodo()" style="font-size:12px;color:#E24B4A;background:none;border:1px solid #E24B4A;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">전체삭제</button>
+  </div>
+  <div class="todo-body">
+    <div class="todo-input-row">
+      <input type="text" class="todo-input" id="todo-input" placeholder="할일을 입력하세요" maxlength="50"/>
+      <button class="todo-add-btn" onclick="addTodo()">추가</button>
+    </div>
+    <div class="todo-count" id="todo-count"></div>
+    <div class="todo-list" id="todo-list"></div>
+  </div>
+</div>
+
+
+
+<!-- 장바구니 페이지 -->
+<div class="todo-page" id="cart-page" style="display:none;">
+  <div class="todo-header">
+    <button class="todo-back" onclick="closeCart()">‹</button>
+    <div class="todo-title">🛒 장보기 리스트</div>
+    <button onclick="clearAllCart()" style="font-size:12px;color:#E24B4A;background:none;border:1px solid #E24B4A;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">전체삭제</button>
+  </div>
+  <div class="todo-body">
+    <div class="todo-input-row">
+      <input type="text" class="todo-input" id="cart-input" placeholder="장보기 항목을 입력하세요" maxlength="50"/>
+      <button class="todo-add-btn" onclick="addCart()">추가</button>
+    </div>
+    <div style="display:flex;align-items:center;margin-bottom:6px;">
+      <div style="font-size:12px;color:#aaa;">자주 사는 항목</div>
+      <button class="cat-manage-btn" onclick="toggleCartEdit()" id="cart-edit-btn">편집</button>
+    </div>
+    <div class="cat-btns" id="cart-quick-btns"></div>
+    <div id="cart-quick-add-row" style="display:none;margin-bottom:10px;">
+      <div class="cat-add-row">
+        <input type="text" class="cat-add-input" id="cart-quick-input" placeholder="항목 입력" maxlength="15"/>
+        <button class="cat-add-submit" onclick="addCartQuick()">추가</button>
+      </div>
+    </div>
+    <div class="todo-count" id="cart-count"></div>
+    <div class="todo-list" id="cart-list"></div>
+  </div>
+</div>
+
+
+
 <div class="todo-page" id="travel-page" style="display:none;">
   <div class="todo-header">
     <button class="todo-back" onclick="closeTravel()">‹</button>
@@ -1023,6 +1072,9 @@ function checkAllTravelStatus(){
 }
 
 /* 뒤로가기 처리 */
+// 초기 state 등록 (뒤로가기 시 앱이 꺼지지 않게)
+history.replaceState({page:'home'}, '', '');
+
 function pushPage(name){
   history.pushState({page:name}, '', '');
 }
@@ -1035,15 +1087,18 @@ function closePage(name){
   else if(name==='travel') closeTravel();
 }
 window.addEventListener('popstate', function(e){
-  if(e.state && e.state.page){
+  if(e.state && e.state.page && e.state.page!=='home'){
     closePage(e.state.page);
-  } else {
+  } else if(!e.state || e.state.page==='home'){
+    // 홈 상태 - 열린 창만 닫기
     closeStats();
     closeTodo();
     closeCart();
     mealClose();
     closeExp();
     closeTravel();
+    // 다시 home state 유지
+    history.replaceState({page:'home'}, '', '');
   }
 });
 
@@ -1671,6 +1726,7 @@ function mealOpen(dateStr, mealKey, lbl) {
   _mealQuickEdit=false;
   renderMealQuickBtns();
   document.getElementById('meal-overlay').style.display='flex';
+  pushPage('meal');
   setTimeout(function(){ document.getElementById('meal-inp-a').focus(); },150);
 }
 
