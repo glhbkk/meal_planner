@@ -2047,12 +2047,18 @@ function renderSchedule(){
 /* ===== 여행 일정 끝 ===== */
 
 /* ===== 비밀번호 잠금 ===== */
-var LOCK_PW = '#03120726';  // ← 여기서 비밀번호 변경
-var LOCK_KEY = 'dabaeng_auth';
+var LOCK_HASH = 'f76a0dfdc8d9b212a99bdf3352a58610dd867c527e9e31397f6e50e80f198abe';
+var LOCK_KEY = 'dabaeng_auth2';
 
-function checkPassword(){
+async function sha256(str){
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+}
+
+async function checkPassword(){
   var val = document.getElementById('lock-input').value;
-  if(val === LOCK_PW){
+  var hashed = await sha256(val);
+  if(hashed === LOCK_HASH){
     localStorage.setItem(LOCK_KEY, '1');
     document.getElementById('lock-screen').style.display = 'none';
     document.getElementById('lock-input').value = '';
