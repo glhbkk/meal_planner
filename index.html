@@ -1974,7 +1974,7 @@ function renderSchedule(){
   days.sort(function(a,b){ return (a.order||0)-(b.order||0); });
 
   if(days.length===0){
-    body.innerHTML='<div class="todo-empty">+ 날짜 추가 버튼으로<br>일정을 만들어보세요 🗓️</div>';
+    body.innerHTML='<div class="todo-empty">+ 날짜 추가 버튼으로 일정을 만들어보세요 🗓️</div>';
     return;
   }
 
@@ -1986,14 +1986,29 @@ function renderSchedule(){
     // 헤더
     var hdr=document.createElement('div');
     hdr.className='sch-day-header';
-    hdr.innerHTML=
-      '<div style="display:flex;align-items:center;gap:6px;flex:1;">'+
-      '<input class="sch-title-inp" value="'+escHtml(day.title||'')+'" '+
-      'onchange="updateScheduleTitle(''+day.id+'',this.value)"/>'+
-      '<input class="sch-date-inp" value="'+escHtml(day.date||'')+'" placeholder="날짜 (예: 5/1)" '+
-      'onchange="updateScheduleDate(''+day.id+'',this.value)"/>'+
-      '</div>'+
-      '<button class="sch-day-del" onclick="deleteScheduleDay(''+day.id+'')">🗑️</button>';
+
+    var titleInp=document.createElement('input');
+    titleInp.className='sch-title-inp';
+    titleInp.value=day.title||'';
+    titleInp.onchange=(function(id){return function(){updateScheduleTitle(id,this.value);};})(day.id);
+
+    var dateInp=document.createElement('input');
+    dateInp.className='sch-date-inp';
+    dateInp.value=day.date||'';
+    dateInp.placeholder='날짜 (예: 5/1)';
+    dateInp.onchange=(function(id){return function(){updateScheduleDate(id,this.value);};})(day.id);
+
+    var delBtn=document.createElement('button');
+    delBtn.className='sch-day-del';
+    delBtn.textContent='🗑️';
+    delBtn.onclick=(function(id){return function(){deleteScheduleDay(id);};})(day.id);
+
+    var hdrLeft=document.createElement('div');
+    hdrLeft.style.cssText='display:flex;align-items:center;gap:6px;flex:1;';
+    hdrLeft.appendChild(titleInp);
+    hdrLeft.appendChild(dateInp);
+    hdr.appendChild(hdrLeft);
+    hdr.appendChild(delBtn);
     card.appendChild(hdr);
 
     // 항목들
@@ -2006,24 +2021,70 @@ function renderSchedule(){
       items.forEach(function(item){
         var isEditing = scheduleEditingItem && scheduleEditingItem.dayId===day.id && scheduleEditingItem.itemId===item.id;
         var row=document.createElement('div');
+
         if(isEditing){
           row.className='sch-item-edit-row';
-          row.innerHTML=
-            '<input id="sch-edit-time-'+item.id+'" class="sch-edit-time" value="'+escHtml(item.time||'')+'" placeholder="시간"'+
-            ' onkeydown="if(event.key==='Enter')saveScheduleEdit(''+day.id+'',''+item.id+'')"/>'+
-            '<input id="sch-edit-text-'+item.id+'" class="sch-edit-text" value="'+escHtml(item.text||'')+'"'+
-            ' onkeydown="if(event.key==='Enter')saveScheduleEdit(''+day.id+'',''+item.id+'');if(event.key==='Escape')cancelScheduleEdit()"/>'+
-            '<button class="sch-edit-ok" onclick="saveScheduleEdit(''+day.id+'',''+item.id+'')">저장</button>'+
-            '<button class="sch-edit-cancel" onclick="cancelScheduleEdit()">취소</button>';
+
+          var etInp=document.createElement('input');
+          etInp.id='sch-edit-time-'+item.id;
+          etInp.className='sch-edit-time';
+          etInp.value=item.time||'';
+          etInp.placeholder='시간';
+          etInp.onkeydown=(function(did,iid){return function(e){if(e.key==='Enter')saveScheduleEdit(did,iid);};})(day.id,item.id);
+
+          var etxt=document.createElement('input');
+          etxt.id='sch-edit-text-'+item.id;
+          etxt.className='sch-edit-text';
+          etxt.value=item.text||'';
+          etxt.onkeydown=(function(did,iid){return function(e){
+            if(e.key==='Enter')saveScheduleEdit(did,iid);
+            if(e.key==='Escape')cancelScheduleEdit();
+          };})(day.id,item.id);
+
+          var okBtn=document.createElement('button');
+          okBtn.className='sch-edit-ok';
+          okBtn.textContent='저장';
+          okBtn.onclick=(function(did,iid){return function(){saveScheduleEdit(did,iid);};})(day.id,item.id);
+
+          var cancelBtn=document.createElement('button');
+          cancelBtn.className='sch-edit-cancel';
+          cancelBtn.textContent='취소';
+          cancelBtn.onclick=function(){cancelScheduleEdit();};
+
+          row.appendChild(etInp);
+          row.appendChild(etxt);
+          row.appendChild(okBtn);
+          row.appendChild(cancelBtn);
         } else {
           row.className='sch-item';
-          row.innerHTML=
-            '<div class="sch-item-time">'+(item.time||'&nbsp;')+'</div>'+
-            '<div class="sch-item-text" ondblclick="startScheduleEdit(''+day.id+'',''+item.id+'')">'+escHtml(item.text||'')+'</div>'+
-            '<div class="sch-item-btns">'+
-            '<button class="sch-item-edit" onclick="startScheduleEdit(''+day.id+'',''+item.id+'')">✏️</button>'+
-            '<button class="sch-item-del" onclick="deleteScheduleItem(''+day.id+'',''+item.id+'')">✕</button>'+
-            '</div>';
+
+          var timeDiv=document.createElement('div');
+          timeDiv.className='sch-item-time';
+          timeDiv.textContent=item.time||'';
+
+          var textDiv=document.createElement('div');
+          textDiv.className='sch-item-text';
+          textDiv.textContent=item.text||'';
+          textDiv.ondblclick=(function(did,iid){return function(){startScheduleEdit(did,iid);};})(day.id,item.id);
+
+          var btns=document.createElement('div');
+          btns.className='sch-item-btns';
+
+          var editBtn=document.createElement('button');
+          editBtn.className='sch-item-edit';
+          editBtn.textContent='✏️';
+          editBtn.onclick=(function(did,iid){return function(){startScheduleEdit(did,iid);};})(day.id,item.id);
+
+          var delItemBtn=document.createElement('button');
+          delItemBtn.className='sch-item-del';
+          delItemBtn.textContent='✕';
+          delItemBtn.onclick=(function(did,iid){return function(){deleteScheduleItem(did,iid);};})(day.id,item.id);
+
+          btns.appendChild(editBtn);
+          btns.appendChild(delItemBtn);
+          row.appendChild(timeDiv);
+          row.appendChild(textDiv);
+          row.appendChild(btns);
         }
         wrap.appendChild(row);
       });
@@ -2033,12 +2094,27 @@ function renderSchedule(){
     // 입력창
     var addRow=document.createElement('div');
     addRow.className='sch-add-row';
-    addRow.innerHTML=
-      '<input id="sch-time-'+day.id+'" class="sch-time-inp" placeholder="시간"'+
-      ' onkeydown="if(event.key==='Enter')document.getElementById('sch-text-'+day.id+'').focus()"/>'+
-      '<input id="sch-text-'+day.id+'" class="sch-text-inp" placeholder="일정 내용 입력"'+
-      ' onkeydown="if(event.key==='Enter')addScheduleItem(''+day.id+'')"/>'+
-      '<button class="sch-add-btn" onclick="addScheduleItem(''+day.id+'')">추가</button>';
+
+    var timeInp=document.createElement('input');
+    timeInp.id='sch-time-'+day.id;
+    timeInp.className='sch-time-inp';
+    timeInp.placeholder='시간';
+    timeInp.onkeydown=(function(id){return function(e){if(e.key==='Enter')document.getElementById('sch-text-'+id).focus();};})(day.id);
+
+    var textInp=document.createElement('input');
+    textInp.id='sch-text-'+day.id;
+    textInp.className='sch-text-inp';
+    textInp.placeholder='일정 내용 입력';
+    textInp.onkeydown=(function(id){return function(e){if(e.key==='Enter')addScheduleItem(id);};})(day.id);
+
+    var addBtn=document.createElement('button');
+    addBtn.className='sch-add-btn';
+    addBtn.textContent='추가';
+    addBtn.onclick=(function(id){return function(){addScheduleItem(id);};})(day.id);
+
+    addRow.appendChild(timeInp);
+    addRow.appendChild(textInp);
+    addRow.appendChild(addBtn);
     card.appendChild(addRow);
 
     body.appendChild(card);
@@ -2050,29 +2126,41 @@ function renderSchedule(){
 var LOCK_HASH = 'f76a0dfdc8d9b212a99bdf3352a58610dd867c527e9e31397f6e50e80f198abe';
 var LOCK_KEY = 'dabaeng_auth2';
 
-async function sha256(str){
-  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+function strToHash(str) {
+  // 간단한 비교를 위해 입력값과 저장된 해시를 비교
+  // SubtleCrypto 대신 직접 비교 방식 사용
+  var result = 0;
+  for (var i = 0; i < str.length; i++) {
+    result = ((result << 5) - result) + str.charCodeAt(i);
+    result = result & result;
+  }
+  return result.toString();
 }
 
-async function checkPassword(){
+function checkPassword() {
   var val = document.getElementById('lock-input').value;
-  var hashed = await sha256(val);
-  if(hashed === LOCK_HASH){
-    localStorage.setItem(LOCK_KEY, '1');
-    document.getElementById('lock-screen').style.display = 'none';
-    document.getElementById('lock-input').value = '';
-  } else {
-    document.getElementById('lock-error').textContent = '비밀번호가 틀렸어요 🔒';
-    document.getElementById('lock-input').value = '';
-    document.getElementById('lock-input').focus();
-    setTimeout(function(){ document.getElementById('lock-error').textContent=''; }, 2000);
-  }
+  if (!val) return;
+  // SubtleCrypto SHA-256 사용
+  var msgBuffer = new TextEncoder().encode(val);
+  crypto.subtle.digest('SHA-256', msgBuffer).then(function(hashBuffer) {
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    var hashed = hashArray.map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+    if (hashed === LOCK_HASH) {
+      localStorage.setItem(LOCK_KEY, '1');
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('lock-input').value = '';
+    } else {
+      document.getElementById('lock-error').textContent = '비밀번호가 틀렸어요 🔒';
+      document.getElementById('lock-input').value = '';
+      document.getElementById('lock-input').focus();
+      setTimeout(function(){ document.getElementById('lock-error').textContent = ''; }, 2000);
+    }
+  });
 }
 
 // 자동 로그인 체크
 (function(){
-  if(localStorage.getItem(LOCK_KEY) === '1'){
+  if (localStorage.getItem(LOCK_KEY) === '1') {
     document.getElementById('lock-screen').style.display = 'none';
   } else {
     document.getElementById('lock-screen').style.display = 'flex';
