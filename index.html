@@ -1983,7 +1983,6 @@ function startScheduleEdit(dayId, itemId){
 function saveScheduleEdit(dayId, itemId){
   var newTime = document.getElementById('sch-edit-time-'+itemId).value.trim();
   var newText = document.getElementById('sch-edit-text-'+itemId).value.trim();
-  if(!newText) return;
   scheduleRef.child(dayId).child('items').child(itemId).update({time:newTime, text:newText});
   scheduleEditingItem = null;
 }
