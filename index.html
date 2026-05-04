@@ -2125,22 +2125,22 @@ function renderSchedule(){
 
     // 입력창
     var addRow=document.createElement('div');
-    addRow.className='sch-add-row'; addRow.style.cssText='display:flex;gap:10px;padding:14px 16px;align-items:center;';
+    addRow.className='sch-add-row'; addRow.style.cssText='display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;align-items:center;';
 
     var timeInp=document.createElement('input');
     timeInp.id='sch-time-'+day.id;
-    timeInp.className='sch-time-inp'; timeInp.style.cssText='width:72px;flex:none;padding:11px 12px;font-size:14px;border:1px solid #444;border-radius:10px;background:#2a2a2a;color:#f0f0f0;outline:none;';
+    timeInp.className='sch-time-inp'; timeInp.style.cssText='width:65px;flex:none;padding:10px 10px;font-size:14px;border:1px solid #444;border-radius:10px;background:#2a2a2a;color:#f0f0f0;outline:none;';
     timeInp.placeholder='시간';
     timeInp.onkeydown=(function(id){return function(e){if(e.key==='Enter')document.getElementById('sch-text-'+id).focus();};})(day.id);
 
     var textInp=document.createElement('input');
     textInp.id='sch-text-'+day.id;
-    textInp.className='sch-text-inp'; textInp.style.cssText='flex:1;padding:11px 14px;font-size:14px;border:1px solid #444;border-radius:10px;background:#2a2a2a;color:#f0f0f0;outline:none;';
+    textInp.className='sch-text-inp'; textInp.style.cssText='flex:1;min-width:0;padding:10px 12px;font-size:14px;border:1px solid #444;border-radius:10px;background:#2a2a2a;color:#f0f0f0;outline:none;';
     textInp.placeholder='일정 내용 입력';
     textInp.onkeydown=(function(id){return function(e){if(e.key==='Enter')addScheduleItem(id);};})(day.id);
 
     var addBtn=document.createElement('button');
-    addBtn.className='sch-add-btn'; addBtn.style.cssText='padding:11px 18px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;';
+    addBtn.className='sch-add-btn'; addBtn.style.cssText='width:100%;padding:11px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;';
     addBtn.textContent='추가';
     addBtn.onclick=(function(id){return function(){addScheduleItem(id);};})(day.id);
 
