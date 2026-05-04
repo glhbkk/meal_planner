@@ -38,7 +38,7 @@
     body.dark .top-bar .top-title{color:#f0f0f0;}
     body.dark .week-txt{color:#aaa;}
     body.dark .nav-btn{background:#2a2a2a;border-color:#444;color:#ccc;}
-    body.dark .budget-wrap,body.dark .exp-wrap,body.dark .meal-sec,body.dark .stats-card,body.dark .crown-card,body.dark .chart-wrap{background:#2a2a2a;border-color:#3a3a3a;}
+    body.dark .budget-wrap,body.dark .exp-wrap,body.dark .meal-sec,body.dark .stats-card,body.dark .crown-card,body.dark .chart-wrap{background:#2a2a2a;border-color:#444;}
     body.dark .budget-ttl,body.dark .b-remain,body.dark .exp-lbl,body.dark .meal-name,body.dark .day-heading,body.dark .exp-row-name,body.dark .exp-row-amt,body.dark .stats-sum-val,body.dark .crown-week,body.dark .stats-bar-name,body.dark .stats-bar-amt{color:#f0f0f0;}
     body.dark .b-total,body.dark .b-meta-txt,body.dark .exp-total,body.dark .exp-empty,body.dark .sync-txt,body.dark .stats-sum-lbl,body.dark .crown-saved,body.dark .stats-section-title{color:#888;}
     body.dark .b-bar-bg{background:#3a3a3a;}
@@ -56,7 +56,7 @@
     body.dark .person-lbl{color:#f0f0f0;border-bottom-color:#3a3a3a;} body.dark .person-add-btn{color:#5BA8F5;border-color:#1a4a7a;}
     body.dark .food-tag{background:#333;border-color:#444;color:#f0f0f0;}
     body.dark .empty-txt{color:#555;}
-    body.dark .exp-hdr{background:#333;}
+    body.dark .exp-hdr{background:#2a2a2a;}
     body.dark .exp-body{border-color:#3a3a3a;}
     body.dark .exp-row{border-color:#3a3a3a;}
     body.dark .chevron svg circle{stroke:#555;}
@@ -223,6 +223,15 @@
     .lock-btn{width:100%;max-width:300px;padding:14px;background:#185FA5;color:#fff;border:none;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;}
     .lock-btn:active{background:#0C447C;}
     .lock-error{font-size:13px;color:#E24B4A;margin-top:8px;min-height:20px;}
+    /* main-grid removed */
+    .main-btn{padding:clamp(16px,4.5vw,20px) 8px;border:1px solid #e0e0e0;border-radius:14px;background:#fff;cursor:pointer;font-size:clamp(14px,3.8vw,16px);font-weight:600;color:#333;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;}
+    .main-btn:active{background:#f0f0f0;}
+    body.dark .main-btn{background:#2a2a2a;border-color:#3a3a3a;color:#f0f0f0;}
+    body.dark .main-btn:active{background:#333;}
+    .meal-toggle-btn{width:100%;padding:clamp(16px,4.5vw,20px) clamp(14px,4vw,18px);border:1px solid #e0e0e0;border-radius:14px;background:#fff;cursor:pointer;font-size:clamp(14px,3.8vw,16px);font-weight:600;color:#333;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .meal-toggle-btn:active{background:#f0f0f0;}
+    body.dark .meal-toggle-btn{background:#2a2a2a;border-color:#3a3a3a;color:#f0f0f0;}
+    body.dark .meal-toggle-btn:active{background:#333;}
     .sync-bar{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 16px;font-size:11px;}
     .sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;}
     .sync-dot.on{background:#639922;}
@@ -236,7 +245,7 @@
     .nav-btn:active{background:#eee;}
     .week-txt{font-size:clamp(11px,3vw,13px);color:#666;min-width:80px;text-align:center;}
 
-    .budget-wrap{margin:clamp(8px,3vw,12px) clamp(12px,4vw,16px) 0;border:1px solid #e0e0e0;border-radius:14px;overflow:hidden;background:#fff;}
+    .budget-wrap{margin:0;border:1.5px solid #e0e0e0;border-radius:14px;overflow:hidden;background:#fff;}
     .budget-top{display:flex;align-items:center;justify-content:space-between;padding:clamp(10px,3vw,13px) clamp(12px,4vw,14px) 8px;}
     .budget-ttl{font-size:clamp(12px,3.5vw,14px);font-weight:500;color:#222;}
     .b-amounts{display:flex;align-items:baseline;gap:6px;}
@@ -250,9 +259,9 @@
     .b-meta{display:flex;justify-content:space-between;margin-top:5px;}
     .b-meta-txt{font-size:clamp(10px,3vw,12px);color:#888;}
 
-    .exp-wrap{margin:clamp(8px,3vw,12px) clamp(12px,4vw,16px) 0;border:1px solid #e0e0e0;border-radius:14px;overflow:hidden;background:#fff;}
-    .exp-hdr{display:flex;align-items:center;padding:clamp(9px,3vw,11px) clamp(10px,3vw,12px);background:#fafafa;cursor:pointer;user-select:none;gap:6px;}
-    .exp-lbl{font-size:clamp(12px,3.5vw,14px);font-weight:500;color:#222;}
+    .exp-wrap{margin:8px clamp(10px,3vw,14px) 0;border:1px solid #e0e0e0;border-radius:14px;overflow:hidden;background:#fff;}
+    .exp-hdr{display:flex;align-items:center;padding:clamp(16px,4.5vw,20px) clamp(14px,4vw,18px);background:#fafafa;cursor:pointer;user-select:none;gap:8px;}
+    .exp-lbl{font-size:clamp(14px,3.8vw,16px);font-weight:600;color:#222;}
     .exp-total{font-size:clamp(11px,3vw,13px);color:#888;flex:1;}
     .exp-hdr-right{display:flex;align-items:center;gap:22px;}
     .chevron{transition:transform 0.2s;display:inline-flex;align-items:center;padding-right:2px;}
@@ -406,22 +415,32 @@
   <div class="top-bar">
     <div class="top-title" onclick="toggleDark()" style="cursor:pointer;">👨‍👩‍👧‍👧 다뱅</div>
     <div class="week-nav">
-      <div class="btn-group-left"><button class="dark-btn" onclick="openTravel()" style="font-size:clamp(16px,5vw,20px);">🧳</button>
-      <button class="dark-btn" onclick="openSchedule()" style="font-size:clamp(16px,5vw,20px);">🗓️</button><button class="dark-btn" onclick="openStats()" style="font-size:clamp(16px,5vw,20px);">📊</button></div>
+      
       <button class="nav-btn" onclick="changeWeek(-1)">‹</button>
       <div class="week-txt" id="week-txt"></div>
       <button class="nav-btn" onclick="changeWeek(1)">›</button>
     </div>
   </div>
-  <div class="budget-wrap" id="budget-wrap"></div>
-  <div class="tabs-wrap"><div class="tabs-grid" id="day-tabs"></div></div>
-  <div style="display:flex;gap:8px;padding:clamp(8px,3vw,12px) clamp(12px,4vw,16px) 0;">
-    <button class="quick-nav-btn" onclick="openTodo()">✅ To-Do 리스트</button>
-    <button class="quick-nav-btn" onclick="openCart()">🛒 장보기 리스트</button>
+  <!-- 메인 레이아웃 -->
+  <div style="padding:8px clamp(10px,3vw,14px) 0;">
+
+    <!-- 용돈 -->
+    <div id="budget-wrap" class="budget-wrap" style="margin-bottom:8px;"></div>
+
+    <!-- 2열 버튼 그리드 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <button class="main-btn" onclick="openTodo()"><span style="font-size:clamp(22px,6vw,26px);">✅</span><span>To-Do 리스트</span></button>
+      <button class="main-btn" onclick="openCart()"><span style="font-size:clamp(22px,6vw,26px);">🛒</span><span>장보기 리스트</span></button>
+      <button class="main-btn" onclick="openTravel()"><span style="font-size:clamp(26px,7vw,30px);">🧳</span><span>여행 준비물</span></button>
+      <button class="main-btn" onclick="openSchedule()"><span style="font-size:clamp(22px,6vw,26px);">🗓️</span><span>여행 일정계획</span></button>
+    </div>
+
   </div>
+
+  <!-- 지출 (분리) -->
   <div class="exp-wrap">
     <div class="exp-hdr" id="exp-hdr">
-      <div class="exp-lbl">💸 지출</div>
+      <div class="exp-lbl"><span style="font-size:clamp(22px,6vw,26px);">💸</span> 지출</div>
       <div class="exp-total" id="exp-total"></div>
       <div class="exp-hdr-right">
         <button class="add-exp-btn" id="add-exp-btn">+ 추가</button>
@@ -432,7 +451,20 @@
       <div class="exp-list" id="exp-list"></div>
     </div>
   </div>
-  <div class="day-view" id="day-view"></div>
+
+  <!-- 식단표 (분리) -->
+  <div style="padding:0 clamp(10px,3vw,14px);margin-top:8px;">
+    <button class="meal-toggle-btn" id="meal-toggle-btn" onclick="toggleMealSection()">
+      <span style="display:flex;align-items:center;gap:8px;"><span style="font-size:clamp(22px,6vw,26px);">🥗</span><span>식단표</span></span>
+      <span id="meal-toggle-arrow">▼</span>
+    </button>
+  </div>
+
+  <!-- 식단표 섹션 -->
+  <div id="meal-section-wrap" style="display:none;">
+    <div class="tabs-wrap"><div class="tabs-grid" id="day-tabs"></div></div>
+    <div class="day-view" id="day-view"></div>
+  </div>
 
 <!-- 통계 페이지 -->
 <div class="stats-page" id="stats-page" style="display:none;">
@@ -454,7 +486,7 @@
   <div class="todo-header">
     <button class="todo-back" onclick="closeSchedule()">‹</button>
     <div class="todo-title">🗓️ 여행 일정</div>
-    <button onclick="addScheduleDay()" style="font-size:12px;color:#185FA5;background:none;border:1px solid #B5D4F4;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">+ 날짜 추가</button>
+    <button onclick="addScheduleDay()" style="font-size:12px;color:#E24B4A;background:none;border:1px solid #E24B4A;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">+ 날짜 추가</button>
   </div>
   <div class="todo-body" id="schedule-body"></div>
 </div>
@@ -1988,12 +2020,12 @@ function renderSchedule(){
     hdr.className='sch-day-header';
 
     var titleInp=document.createElement('input');
-    titleInp.className='sch-title-inp';
+    titleInp.className='sch-title-inp'; titleInp.style.cssText='font-size:14px;font-weight:700;color:#5BA8F5;background:none;border:none;outline:none;width:80px;';
     titleInp.value=day.title||'';
     titleInp.onchange=(function(id){return function(){updateScheduleTitle(id,this.value);};})(day.id);
 
     var dateInp=document.createElement('input');
-    dateInp.className='sch-date-inp';
+    dateInp.className='sch-date-inp'; dateInp.style.cssText='font-size:14px;font-weight:700;color:#5BA8F5;background:none;border:none;outline:none;width:130px;'; dateInp.style.cssText='font-size:12px;color:#888;background:none;border:none;outline:none;width:110px;';
     dateInp.value=day.date||'';
     dateInp.placeholder='날짜 (예: 5/1)';
     dateInp.onchange=(function(id){return function(){updateScheduleDate(id,this.value);};})(day.id);
@@ -2027,14 +2059,14 @@ function renderSchedule(){
 
           var etInp=document.createElement('input');
           etInp.id='sch-edit-time-'+item.id;
-          etInp.className='sch-edit-time';
+          etInp.className='sch-edit-time'; etInp.style.cssText='width:60px;flex:none;padding:7px 10px;font-size:13px;border:1px solid #185FA5;border-radius:8px;background:#2a2a2a;color:#f0f0f0;outline:none;';
           etInp.value=item.time||'';
           etInp.placeholder='시간';
           etInp.onkeydown=(function(did,iid){return function(e){if(e.key==='Enter')saveScheduleEdit(did,iid);};})(day.id,item.id);
 
           var etxt=document.createElement('input');
           etxt.id='sch-edit-text-'+item.id;
-          etxt.className='sch-edit-text';
+          etxt.className='sch-edit-text'; etxt.style.cssText='flex:1;padding:7px 10px;font-size:13px;border:1px solid #185FA5;border-radius:8px;background:#2a2a2a;color:#f0f0f0;outline:none;';
           etxt.value=item.text||'';
           etxt.onkeydown=(function(did,iid){return function(e){
             if(e.key==='Enter')saveScheduleEdit(did,iid);
@@ -2093,22 +2125,22 @@ function renderSchedule(){
 
     // 입력창
     var addRow=document.createElement('div');
-    addRow.className='sch-add-row';
+    addRow.className='sch-add-row'; addRow.style.cssText='display:flex;gap:10px;padding:14px 16px;align-items:center;';
 
     var timeInp=document.createElement('input');
     timeInp.id='sch-time-'+day.id;
-    timeInp.className='sch-time-inp';
+    timeInp.className='sch-time-inp'; timeInp.style.cssText='width:72px;flex:none;padding:11px 12px;font-size:14px;border:1px solid #444;border-radius:10px;background:#2a2a2a;color:#f0f0f0;outline:none;';
     timeInp.placeholder='시간';
     timeInp.onkeydown=(function(id){return function(e){if(e.key==='Enter')document.getElementById('sch-text-'+id).focus();};})(day.id);
 
     var textInp=document.createElement('input');
     textInp.id='sch-text-'+day.id;
-    textInp.className='sch-text-inp';
+    textInp.className='sch-text-inp'; textInp.style.cssText='flex:1;padding:11px 14px;font-size:14px;border:1px solid #444;border-radius:10px;background:#2a2a2a;color:#f0f0f0;outline:none;';
     textInp.placeholder='일정 내용 입력';
     textInp.onkeydown=(function(id){return function(e){if(e.key==='Enter')addScheduleItem(id);};})(day.id);
 
     var addBtn=document.createElement('button');
-    addBtn.className='sch-add-btn';
+    addBtn.className='sch-add-btn'; addBtn.style.cssText='padding:11px 18px;background:#185FA5;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;';
     addBtn.textContent='추가';
     addBtn.onclick=(function(id){return function(){addScheduleItem(id);};})(day.id);
 
@@ -2168,6 +2200,14 @@ function checkPassword() {
   }
 })();
 /* ===== 잠금 끝 ===== */
+
+/* 식단표 토글 */
+var mealSectionOpen = false;
+function toggleMealSection(){
+  mealSectionOpen = !mealSectionOpen;
+  document.getElementById('meal-section-wrap').style.display = mealSectionOpen ? 'block' : 'none';
+  document.getElementById('meal-toggle-arrow').textContent = mealSectionOpen ? '▲' : '▼';
+}
 </script>
 </body>
 </html>
