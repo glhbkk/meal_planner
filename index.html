@@ -1985,6 +1985,7 @@ function saveScheduleEdit(dayId, itemId){
   var newText = document.getElementById('sch-edit-text-'+itemId).value.trim();
   scheduleRef.child(dayId).child('items').child(itemId).update({time:newTime, text:newText});
   scheduleEditingItem = null;
+  renderSchedule();
 }
 
 function cancelScheduleEdit(){
@@ -2080,19 +2081,23 @@ function renderSchedule(){
           };})(day.id,item.id);
 
           var okBtn=document.createElement('button');
-          okBtn.className='sch-edit-ok';
+          okBtn.className='sch-edit-ok'; okBtn.style.cssText='width:100%;padding:10px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;';
           okBtn.textContent='저장';
           okBtn.onclick=(function(did,iid){return function(){saveScheduleEdit(did,iid);};})(day.id,item.id);
 
-          var cancelBtn=document.createElement('button');
-          cancelBtn.className='sch-edit-cancel';
-          cancelBtn.textContent='취소';
-          cancelBtn.onclick=function(){cancelScheduleEdit();};
 
-          row.appendChild(etInp);
-          row.appendChild(etxt);
-          row.appendChild(okBtn);
-          row.appendChild(cancelBtn);
+
+          var editBtnRow=document.createElement('div');
+          editBtnRow.style.cssText='display:flex;gap:8px;margin-top:6px;';
+          editBtnRow.appendChild(okBtn);
+
+          var editInpRow=document.createElement('div');
+          editInpRow.style.cssText='display:flex;gap:6px;';
+          editInpRow.appendChild(etInp);
+          editInpRow.appendChild(etxt);
+
+          row.appendChild(editInpRow);
+          row.appendChild(editBtnRow);
         } else {
           row.className='sch-item';
 
