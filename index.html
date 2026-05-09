@@ -57,6 +57,7 @@
     body.dark .food-tag{background:#333;border-color:#444;color:#f0f0f0;}
     body.dark .empty-txt{color:#555;}
     body.dark .exp-hdr{background:#2a2a2a;}
+    body.dark #budget-wrap{border-color:#3a3a3a;}
     body.dark .exp-body{border-color:#3a3a3a;}
     body.dark .exp-row{border-color:#3a3a3a;}
     body.dark .chevron svg circle{stroke:#555;}
@@ -424,9 +425,6 @@
   <!-- 메인 레이아웃 -->
   <div style="padding:8px clamp(10px,3vw,14px) 0;">
 
-    <!-- 용돈 -->
-    <div id="budget-wrap" class="budget-wrap" style="margin-bottom:8px;"></div>
-
     <!-- 2열 버튼 그리드 -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
       <button class="main-btn" onclick="openTodo()"><span style="font-size:clamp(22px,6vw,26px);">✅</span><span>To-Do 리스트</span></button>
@@ -448,6 +446,7 @@
       </div>
     </div>
     <div class="exp-body" id="exp-body">
+      <div id="budget-wrap" style="padding:clamp(10px,3vw,14px) clamp(14px,4vw,18px) 4px;border-bottom:1px solid #e0e0e0;"></div>
       <div class="exp-list" id="exp-list"></div>
     </div>
   </div>
