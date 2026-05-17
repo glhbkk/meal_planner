@@ -232,7 +232,39 @@
     .meal-toggle-btn{width:100%;padding:clamp(16px,4.5vw,20px) clamp(14px,4vw,18px);border:1px solid #e0e0e0;border-radius:14px;background:#fff;cursor:pointer;font-size:clamp(14px,3.8vw,16px);font-weight:600;color:#333;display:flex;align-items:center;justify-content:space-between;gap:8px;}
     .meal-toggle-btn:active{background:#f0f0f0;}
     body.dark .meal-toggle-btn{background:#2a2a2a;border-color:#3a3a3a;color:#f0f0f0;}
+    body.dark #expiry-card-wrap{background:#2a2a2a !important;border-color:#3a3a3a !important;}
+    body.dark #expiry-card-wrap .todo-title, body.dark #expiry-card-title{color:#f0f0f0 !important;}
+    body.dark #expiry-card-wrap button[style*="color:#185FA5"]{color:#5BA8F5 !important;border-color:#1a4a7a !important;}
+    body.dark #expiry-card-wrap .expiry-item{background:#222 !important;border-color:#333 !important;}
+    body.dark #expiry-card-wrap .expiry-item.danger{background:#2a1a1a !important;}
+    body.dark #expiry-card-wrap .expiry-item.warning{background:#2a2200 !important;}
+    body.dark #expiry-card-wrap .expiry-item.safe{background:#1a2a1a !important;}
+    body.dark #expiry-card-body .expiry-item{background:#2a2a2a;border-color:#333;}
+    body.dark #expiry-card-body .expiry-item.danger{background:#2a1a1a;}
+    body.dark #expiry-card-body .expiry-item.warning{background:#2a2200;}
+    body.dark #expiry-card-body .expiry-item.safe{background:#1a2a1a;}
+    #expiry-card-title{color:#333;}
+    body.dark #expiry-card-title{color:#f0f0f0 !important;}
     body.dark .meal-toggle-btn:active{background:#333;}
+    .expiry-item{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;}
+    body.dark .expiry-item{background:#222;border-color:#333;}
+    .expiry-item.danger{border-color:#E24B4A;background:#fff5f5;}
+    body.dark .expiry-item.danger{background:#2a1a1a;border-color:#E24B4A;}
+    .expiry-item.warning{border-color:#f0a500;background:#fffbf0;}
+    body.dark .expiry-item.warning{background:#2a2200;border-color:#f0a500;}
+    .expiry-item.safe{border-color:#4CAF50;background:#f5fff5;}
+    body.dark .expiry-item.safe{background:#1a2a1a;border-color:#4CAF50;}
+    .expiry-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .expiry-name{flex:1;font-size:15px;font-weight:600;color:#222;}
+    body.dark .expiry-name{color:#f0f0f0;}
+    .expiry-date{font-size:12px;color:#888;}
+    .expiry-dday{font-size:12px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap;}
+    .expiry-del{background:none;border:none;color:#ccc;font-size:16px;cursor:pointer;flex-shrink:0;}
+    .expiry-del:active{color:#E24B4A;}
+    .voice-btn{width:44px;height:44px;border-radius:50%;border:none;background:#185FA5;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s;}
+    .voice-btn.recording{background:#E24B4A;animation:pulse 1s infinite;}
+    .voice-btn:active{opacity:0.8;}
+    @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
     .sync-bar{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 16px;font-size:11px;}
     .sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;}
     .sync-dot.on{background:#639922;}
@@ -367,6 +399,7 @@
     .cat-add-submit{padding:8px 14px;border:none;border-radius:20px;background:#185FA5;color:#fff;font-size:13px;cursor:pointer;white-space:nowrap;}
     .cat-del-btn{font-size:11px;color:#E24B4A;background:none;border:none;cursor:pointer;padding:2px 4px;margin-left:2px;}
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
+    #expiry-sheet{z-index:500;}
     .sheet{background:#ffffff;border-radius:20px 20px 0 0;padding:clamp(16px,5vw,24px) clamp(16px,5vw,24px) clamp(30px,9vw,44px);width:100%;max-width:600px;box-shadow:0 -4px 24px rgba(0,0,0,0.15);}
     .sheet-handle{width:40px;height:4px;background:#ddd;border-radius:2px;margin:0 auto 18px;}
     .sheet-title{font-size:clamp(15px,4.5vw,18px);font-weight:700;color:#111;margin-bottom:4px;}
@@ -435,6 +468,22 @@
 
   </div>
 
+  <!-- 유통기한 카드 -->
+  <div style="padding:8px clamp(10px,3vw,14px) 0;">
+    <div style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;overflow:hidden;" id="expiry-card-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:clamp(14px,4vw,18px) clamp(14px,4vw,18px);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:clamp(22px,6vw,26px);">🧊</span>
+          <span style="font-size:clamp(14px,3.8vw,16px);font-weight:600;" id="expiry-card-title">유통기한 관리</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button onclick="openExpiryAdd()" style="font-size:12px;color:#185FA5;background:none;border:1px solid #B5D4F4;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">+ 추가</button>
+          <span class="chevron" id="expiry-card-chevron" onclick="toggleExpiryCard()" style="cursor:pointer;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#ddd" stroke-width="1.5" fill="#fff"/><path d="M6.5 11.5L10 8L13.5 11.5" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+      </div>
+      <div id="expiry-card-body" style="display:block;padding:0 clamp(10px,3vw,14px) clamp(10px,3vw,14px);"></div>
+    </div>
+  </div>
   <!-- 지출 (분리) -->
   <div class="exp-wrap">
     <div class="exp-hdr" id="exp-hdr">
@@ -458,6 +507,7 @@
       <span id="meal-toggle-arrow" class="chevron"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#ddd" stroke-width="1.5" fill="#fff"/><path d="M6.5 8.5L10 12L13.5 8.5" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </button>
   </div>
+
 
   <!-- 식단표 섹션 -->
   <div id="meal-section-wrap" style="display:none;">
@@ -488,6 +538,51 @@
     <button onclick="addScheduleDay()" style="font-size:12px;color:#E24B4A;background:none;border:1px solid #E24B4A;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">+ 날짜 추가</button>
   </div>
   <div class="todo-body" id="schedule-body"></div>
+</div>
+
+<!-- 유통기한 페이지 -->
+<div class="todo-page" id="expiry-page" style="display:none;">
+  <div class="todo-header">
+    <button class="todo-back" onclick="closeExpiry()">‹</button>
+    <div class="todo-title">🧊 유통기한 관리</div>
+    <button onclick="openExpiryAdd()" style="font-size:12px;color:#185FA5;background:none;border:1px solid #B5D4F4;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">+ 추가</button>
+  </div>
+  <!-- 경고 배너 -->
+  <div id="expiry-banner" style="display:none;margin:10px 14px 0;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:600;"></div>
+  <div class="todo-body" id="expiry-body"></div>
+</div>
+
+<!-- 유통기한 추가 시트 -->
+<div class="overlay" id="expiry-sheet" style="display:none;" onclick="if(event.target===this)closeExpiryAdd()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" style="margin-bottom:12px;">유통기한 추가</div>
+    <!-- 음성 입력 안내 -->
+    <div id="voice-status" style="display:none;text-align:center;padding:8px;margin-bottom:10px;background:#E8F1FB;border-radius:10px;font-size:13px;color:#185FA5;font-weight:600;"></div>
+
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-size:12px;color:#aaa;">식품 이름</div>
+        <button class="voice-btn" id="voice-btn" onclick="startVoiceInput()" title="음성으로 입력">🎤</button>
+      </div>
+      <input type="text" id="expiry-name-inp" placeholder="예: 우유, 요거트 (또는 🎤 버튼)" maxlength="30"
+        style="width:100%;padding:11px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"
+        onkeydown="if(event.key==='Enter')document.getElementById('expiry-date-inp').focus()"/>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div style="font-size:12px;color:#aaa;margin-bottom:6px;">유통기한</div>
+      <input type="date" id="expiry-date-inp"
+        style="width:100%;padding:11px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"
+        onkeydown="if(event.key==='Enter')saveExpiryItem()"/>
+    </div>
+    <div style="font-size:11px;color:#bbb;margin-bottom:12px;text-align:center;">
+      🎤 "우유 5월 20일" 또는 "계란 2025년 6월 1일" 이라고 말해보세요
+    </div>
+    <div class="sheet-btns">
+      <button class="btn-save" onclick="saveExpiryItem()">추가하기</button>
+      <button class="btn-cancel" onclick="closeExpiryAdd()">취소</button>
+    </div>
+  </div>
 </div>
 
 <!-- 여행 준비물 페이지 -->
@@ -1186,6 +1281,8 @@ function closePage(name){
   else if(name==='exp') closeExp();
   else if(name==='travel') closeTravel();
   else if(name==='schedule') closeSchedule();
+  else if(name==='expiry') closeExpiry();
+
 }
 window.addEventListener('popstate', function(e){
   if(e.state && e.state.page && e.state.page!=='home'){
@@ -1199,6 +1296,7 @@ window.addEventListener('popstate', function(e){
     closeExp();
     closeTravel();
     closeSchedule();
+    closeExpiry();
     // 다시 home state 유지
     history.replaceState({page:'home'}, '', '');
   }
@@ -2255,6 +2353,296 @@ function toggleMealSection(){
     ? '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#ddd" stroke-width="1.5" fill="#fff"/><path d="M6.5 11.5L10 8L13.5 11.5" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     : '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" stroke="#ddd" stroke-width="1.5" fill="#fff"/><path d="M6.5 8.5L10 12L13.5 8.5" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 }
+
+/* ===== 유통기한 관리 ===== */
+var expiryRef = db.ref('expiry');
+var expiryData = [];
+
+expiryRef.on('value', function(snapshot){
+  var val = snapshot.val();
+  expiryData = val ? Object.entries(val).map(function(e){ return Object.assign({id:e[0]},e[1]); }) : [];
+  expiryData.sort(function(a,b){ return new Date(a.date)-new Date(b.date); });
+  renderExpiry();
+  renderExpiryCard();
+});
+
+function openExpiry(){
+  document.getElementById('expiry-page').style.display='block';
+  pushPage('expiry');
+}
+function closeExpiry(){
+  document.getElementById('expiry-page').style.display='none';
+}
+function openExpiryAdd(){
+  document.getElementById('expiry-sheet').style.display='flex';
+  document.getElementById('expiry-name-inp').value='';
+  document.getElementById('expiry-date-inp').value='';
+  setTimeout(function(){ document.getElementById('expiry-name-inp').focus(); },150);
+}
+function closeExpiryAdd(){
+  document.getElementById('expiry-sheet').style.display='none';
+  stopVoiceInput();
+  var status = document.getElementById('voice-status');
+  if(status){ status.style.display='none'; status.style.background='#E8F1FB'; status.style.color='#185FA5'; }
+}
+function saveExpiryItem(){
+  var name = document.getElementById('expiry-name-inp').value.trim();
+  var date = document.getElementById('expiry-date-inp').value;
+  if(!name||!date) return;
+  expiryRef.push({name:name, date:date, createdAt:Date.now()});
+  closeExpiryAdd();
+}
+function deleteExpiryItem(id){
+  expiryRef.child(id).remove();
+}
+
+function getDday(dateStr){
+  var today = new Date(); today.setHours(0,0,0,0);
+  var exp = new Date(dateStr); exp.setHours(0,0,0,0);
+  return Math.floor((exp-today)/(1000*60*60*24));
+}
+
+function updateExpiryMainBtn(){
+  var btn = document.getElementById('expiry-main-btn');
+  if(!btn) return; // 버튼 없으면 스킵
+  var danger = expiryData.filter(function(e){ return getDday(e.date)<=0; }).length;
+  var warning = expiryData.filter(function(e){ var d=getDday(e.date); return d>0&&d<=3; }).length;
+  var badge = btn.querySelector('.expiry-badge');
+  if(badge) badge.remove();
+  if(danger>0||warning>0){
+    var b = document.createElement('span');
+    b.className='expiry-badge';
+    b.style.cssText='background:'+(danger>0?'#E24B4A':'#f0a500')+';color:#fff;border-radius:20px;font-size:11px;font-weight:700;padding:2px 7px;margin-left:6px;';
+    b.textContent = danger>0 ? '만료 '+danger : '임박 '+warning;
+    btn.querySelector('span:last-child').appendChild(b);
+  }
+}
+
+function renderExpiry(){
+  var body = document.getElementById('expiry-body');
+  var banner = document.getElementById('expiry-banner');
+  if(!body) return;
+
+  // 배너
+  var danger = expiryData.filter(function(e){ return getDday(e.date)<=0; });
+  var warning = expiryData.filter(function(e){ var d=getDday(e.date); return d>0&&d<=3; });
+  if(danger.length>0){
+    banner.style.display='block';
+    banner.style.cssText='display:block;margin:10px 14px 0;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:600;background:#fff0f0;border:1px solid #E24B4A;color:#E24B4A;';
+    banner.textContent='⚠️ 만료된 식품 '+danger.length+'개 있어요! 확인해주세요.';
+  } else if(warning.length>0){
+    banner.style.display='block';
+    banner.style.cssText='display:block;margin:10px 14px 0;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:600;background:#fffbf0;border:1px solid #f0a500;color:#f0a500;';
+    banner.textContent='🕐 3일 이내 만료 식품 '+warning.length+'개 있어요!';
+  } else {
+    banner.style.display='none';
+  }
+
+  if(expiryData.length===0){
+    body.innerHTML='<div class="todo-empty">유통기한을 추가해보세요 🧊</div>';
+    return;
+  }
+
+  body.innerHTML='';
+  expiryData.forEach(function(item){
+    var dday = getDday(item.date);
+    var el = document.createElement('div');
+    var cls = dday<0 ? 'danger' : dday<=3 ? 'warning' : 'safe';
+    el.className = 'expiry-item '+cls;
+
+    var dotColor = dday<0 ? '#E24B4A' : dday<=3 ? '#f0a500' : '#4CAF50';
+    var ddayText = dday<0 ? '만료 '+Math.abs(dday)+'일' : dday===0 ? '오늘 만료!' : dday+'일 남음';
+    var ddayBg = dday<0 ? '#E24B4A' : dday<=3 ? '#f0a500' : '#4CAF50';
+
+    el.innerHTML =
+      '<div class="expiry-dot" style="background:'+dotColor+';"></div>'+
+      '<div style="flex:1;">'+
+        '<div class="expiry-name">'+item.name+'</div>'+
+        '<div class="expiry-date">'+item.date.replace(/-/g,'.')+'</div>'+
+      '</div>'+
+      '<div class="expiry-dday" style="background:'+ddayBg+';color:#fff;">'+ddayText+'</div>'+
+      '<button class="expiry-del" onclick="deleteExpiryItem(\'' + item.id + '\')">✕</button>';
+    body.appendChild(el);
+  });
+}
+
+// closePage에 expiry 추가
+/* ===== 유통기한 끝 ===== */
+
+/* 유통기한 카드 토글 */
+var expiryCardOpen = true;
+function toggleExpiryCard(){
+  expiryCardOpen = !expiryCardOpen;
+  document.getElementById('expiry-card-body').style.display = expiryCardOpen ? 'block' : 'none';
+  var arrow = document.getElementById('expiry-card-chevron');
+  arrow.innerHTML = expiryCardOpen
+    ? '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#ddd" stroke-width="1.5" fill="#fff"/><path d="M6.5 11.5L10 8L13.5 11.5" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#ddd" stroke-width="1.5" fill="#fff"/><path d="M6.5 8.5L10 12L13.5 8.5" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  renderExpiryCard();
+}
+
+function renderExpiryCard(){
+  var body = document.getElementById('expiry-card-body');
+  if(!body || !expiryCardOpen) return;
+  if(expiryData.length===0){
+    body.innerHTML='<div style="text-align:center;padding:16px 0;color:#aaa;font-size:13px;">유통기한을 추가해보세요 🧊</div>';
+    return;
+  }
+  body.innerHTML='';
+  expiryData.forEach(function(item){
+    var dday = getDday(item.date);
+    var cls = dday<0 ? 'danger' : dday<=3 ? 'warning' : 'safe';
+    var dotColor = dday<0 ? '#E24B4A' : dday<=3 ? '#f0a500' : '#4CAF50';
+    var ddayText = dday<0 ? '만료 '+Math.abs(dday)+'일' : dday===0 ? '오늘!' : dday+'일 남음';
+    var ddayBg = dday<0 ? '#E24B4A' : dday<=3 ? '#f0a500' : '#4CAF50';
+    var el = document.createElement('div');
+    el.className = 'expiry-item '+cls;
+    el.style.marginBottom = '6px';
+    var _dot=document.createElement('div');
+    _dot.className='expiry-dot'; _dot.style.background=dotColor;
+    var _info=document.createElement('div'); _info.style.flex='1';
+    var _n=document.createElement('div'); _n.className='expiry-name'; _n.textContent=item.name;
+    var _d=document.createElement('div'); _d.className='expiry-date'; _d.textContent=item.date.replace(/-/g,'.');
+    _info.appendChild(_n); _info.appendChild(_d);
+    var _dd=document.createElement('div'); _dd.className='expiry-dday';
+    _dd.style.cssText='background:'+ddayBg+';color:#fff;'; _dd.textContent=ddayText;
+    var _del=document.createElement('button'); _del.className='expiry-del'; _del.textContent='✕'; _del.style.marginLeft='4px';
+    (function(id){_del.onclick=function(){deleteExpiryItem(id);};})(item.id);
+    el.appendChild(_dot); el.appendChild(_info); el.appendChild(_dd); el.appendChild(_del);
+    body.appendChild(el);
+  });
+
+  // 타이틀에 뱃지
+  var title = document.getElementById('expiry-card-title');
+  var danger = expiryData.filter(function(e){ return getDday(e.date)<=0; }).length;
+  var warning = expiryData.filter(function(e){ var d=getDday(e.date); return d>0&&d<=3; }).length;
+  var badge = title.querySelector('.expiry-badge');
+  if(badge) badge.remove();
+  if(danger>0||warning>0){
+    var b = document.createElement('span');
+    b.className='expiry-badge';
+    b.style.cssText='background:'+(danger>0?'#E24B4A':'#f0a500')+';color:#fff;border-radius:20px;font-size:11px;font-weight:700;padding:2px 8px;margin-left:8px;';
+    b.textContent = danger>0 ? '만료 '+danger : '임박 '+warning;
+    title.appendChild(b);
+  }
+}
+
+/* ===== 음성 입력 ===== */
+var recognition = null;
+var isRecording = false;
+
+function initSpeechRecognition(){
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition){
+    alert('이 브라우저는 음성 입력을 지원하지 않아요.\n크롬 또는 삼성 인터넷을 사용해주세요.');
+    return null;
+  }
+  var r = new SpeechRecognition();
+  r.lang = 'ko-KR';
+  r.continuous = false;
+  r.interimResults = false;
+  return r;
+}
+
+function startVoiceInput(){
+  if(isRecording){ stopVoiceInput(); return; }
+
+  recognition = initSpeechRecognition();
+  if(!recognition) return;
+
+  isRecording = true;
+  var btn = document.getElementById('voice-btn');
+  var status = document.getElementById('voice-status');
+  btn.classList.add('recording');
+  btn.textContent = '⏹';
+  status.style.display = 'block';
+  status.textContent = '🎤 듣고 있어요... 말씀해주세요!';
+
+  recognition.onresult = function(e){
+    var text = e.results[0][0].transcript;
+    status.textContent = '✅ 인식됨: "' + text + '"';
+    parseVoiceInput(text);
+    stopVoiceInput();
+  };
+
+  recognition.onerror = function(e){
+    status.textContent = '❌ 인식 실패. 다시 시도해주세요.';
+    status.style.background = '#fff0f0';
+    status.style.color = '#E24B4A';
+    stopVoiceInput();
+  };
+
+  recognition.onend = function(){
+    if(isRecording) stopVoiceInput();
+  };
+
+  recognition.start();
+}
+
+function stopVoiceInput(){
+  isRecording = false;
+  var btn = document.getElementById('voice-btn');
+  if(btn){ btn.classList.remove('recording'); btn.textContent = '🎤'; }
+  if(recognition){ try{ recognition.stop(); }catch(e){} }
+}
+
+function parseVoiceInput(text){
+  // 날짜 파싱 - 다양한 형식 지원
+  var name = text;
+  var dateStr = '';
+
+  // 패턴들: "5월 20일", "2025년 6월 1일", "25년 5월", "5/20", "05-20"
+  var patterns = [
+    // 2025년 6월 1일
+    { re: /(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일/, fn: function(m){ return m[1]+'-'+pad(m[2])+'-'+pad(m[3]); } },
+    // 25년 6월 1일
+    { re: /(\d{2})년\s*(\d{1,2})월\s*(\d{1,2})일/, fn: function(m){ return '20'+m[1]+'-'+pad(m[2])+'-'+pad(m[3]); } },
+    // 6월 1일 (올해/내년)
+    { re: /(\d{1,2})월\s*(\d{1,2})일/, fn: function(m){
+      var today = new Date();
+      var y = today.getFullYear();
+      var mo = parseInt(m[1]); var d = parseInt(m[2]);
+      var dt = new Date(y, mo-1, d);
+      if(dt < today) dt = new Date(y+1, mo-1, d);
+      return dt.getFullYear()+'-'+pad(mo)+'-'+pad(d);
+    }},
+    // 6월 (이번달/다음달 말일)
+    { re: /(\d{1,2})월$/, fn: function(m){
+      var today = new Date();
+      var y = today.getFullYear();
+      var mo = parseInt(m[1]);
+      var lastDay = new Date(y, mo, 0).getDate();
+      if(new Date(y, mo-1, lastDay) < today) y++;
+      return y+'-'+pad(mo)+'-'+pad(lastDay);
+    }},
+    // 5/20 또는 05-20
+    { re: /(\d{1,2})[\/\-](\d{1,2})/, fn: function(m){
+      var today = new Date(); var y = today.getFullYear();
+      var mo = parseInt(m[1]); var d = parseInt(m[2]);
+      var dt = new Date(y, mo-1, d);
+      if(dt < today) dt = new Date(y+1, mo-1, d);
+      return dt.getFullYear()+'-'+pad(mo)+'-'+pad(d);
+    }}
+  ];
+
+  for(var i=0; i<patterns.length; i++){
+    var m = text.match(patterns[i].re);
+    if(m){
+      dateStr = patterns[i].fn(m);
+      // 날짜 부분 제거해서 이름만 남기기
+      name = text.replace(m[0], '').replace(/\s+/g,' ').trim();
+      break;
+    }
+  }
+
+  if(name) document.getElementById('expiry-name-inp').value = name;
+  if(dateStr) document.getElementById('expiry-date-inp').value = dateStr;
+  if(!dateStr) document.getElementById('expiry-date-inp').focus();
+  else if(!name) document.getElementById('expiry-name-inp').focus();
+}
+
+function pad(n){ return String(n).padStart(2,'0'); }
+/* ===== 음성 입력 끝 ===== */
 </script>
 </body>
 </html>
