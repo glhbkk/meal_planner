@@ -157,6 +157,7 @@
     .budget-history-amount{font-size:14px;font-weight:700;color:#E24B4A;white-space:nowrap;}
     .budget-history-del{background:none;border:none;color:#ccc;font-size:14px;cursor:pointer;padding:0 2px;}
     .budget-history-del:active{color:#E24B4A;}
+    #pattern-lock-screen{ font-family: inherit; }
     .sync-bar{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 16px;font-size:11px;}
     .sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;}
     .sync-dot.on{background:#639922;}
@@ -323,6 +324,15 @@
   </style>
 </head>
 <body>
+
+<!-- 패턴 잠금 화면 -->
+<div id="pattern-lock-screen" style="position:fixed;inset:0;background:#f5f5f5;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;">
+  <div style="font-size:40px;margin-bottom:12px;">👨‍👩‍👧‍👧</div>
+  <div style="font-size:22px;font-weight:700;color:#222;margin-bottom:6px;">다뱅 Home</div>
+  <div id="pattern-msg" style="font-size:14px;color:#888;margin-bottom:32px;">패턴을 그려주세요</div>
+  <canvas id="pattern-canvas" width="240" height="240" style="touch-action:none;cursor:pointer;"></canvas>
+  <button id="pattern-reset-btn" onclick="resetPattern()" style="margin-top:20px;padding:8px 24px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#888;font-size:14px;cursor:pointer;display:none;">다시 그리기</button>
+</div>
 <div class="sync-bar">
     <div class="sync-dot" id="sync-dot"></div>
     <div class="sync-txt" id="sync-txt">연결 중...</div>
@@ -3323,6 +3333,171 @@ function setExpiryName(name){
   });
   document.getElementById('expiry-date-inp').focus();
 }
+
+/* ===== 패턴 잠금 ===== */
+var PATTERN_KEY = 'dabaeng_pattern2';
+var CORRECT_HASH = '078aa859f09bf94699649b1def8491949b8cc76b8dff1485ef0cb4c4c615b7e4'; // 기본 패턴 (ㄴ자)
+var patternSelected = [];
+var patternDrawing = false;
+var patternCanvas, patternCtx;
+
+var DOTS = [];
+var DOT_R = 16;
+var CANVAS_SIZE = 240;
+var MARGIN = 40;
+var STEP = (CANVAS_SIZE - MARGIN*2) / 2;
+
+function initPatternDots(){
+  DOTS = [];
+  for(var r=0;r<3;r++){
+    for(var c=0;c<3;c++){
+      DOTS.push({ x: MARGIN+c*STEP, y: MARGIN+r*STEP, idx: r*3+c });
+    }
+  }
+}
+
+function drawPattern(currentPos){
+  patternCtx.clearRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
+  // 점 그리기
+  DOTS.forEach(function(d){
+    var selected = patternSelected.indexOf(d.idx) !== -1;
+    patternCtx.beginPath();
+    patternCtx.arc(d.x, d.y, DOT_R, 0, Math.PI*2);
+    patternCtx.fillStyle = selected ? '#185FA5' : '#ddd';
+    patternCtx.fill();
+    if(selected){
+      patternCtx.beginPath();
+      patternCtx.arc(d.x, d.y, DOT_R*0.4, 0, Math.PI*2);
+      patternCtx.fillStyle = '#fff';
+      patternCtx.fill();
+    }
+  });
+  // 연결선
+  patternCtx.strokeStyle = '#185FA5';
+  patternCtx.lineWidth = 3;
+  patternCtx.lineCap = 'round';
+  for(var i=1;i<patternSelected.length;i++){
+    var a=DOTS[patternSelected[i-1]], b=DOTS[patternSelected[i]];
+    patternCtx.beginPath();
+    patternCtx.moveTo(a.x,a.y);
+    patternCtx.lineTo(b.x,b.y);
+    patternCtx.stroke();
+  }
+  // 드래그 중인 선
+  if(currentPos && patternSelected.length>0){
+    var last=DOTS[patternSelected[patternSelected.length-1]];
+    patternCtx.beginPath();
+    patternCtx.moveTo(last.x,last.y);
+    patternCtx.lineTo(currentPos.x,currentPos.y);
+    patternCtx.stroke();
+  }
+}
+
+function getPos(e){
+  var rect=patternCanvas.getBoundingClientRect();
+  var scaleX=CANVAS_SIZE/rect.width;
+  var scaleY=CANVAS_SIZE/rect.height;
+  var clientX=e.touches?e.touches[0].clientX:e.clientX;
+  var clientY=e.touches?e.touches[0].clientY:e.clientY;
+  return { x:(clientX-rect.left)*scaleX, y:(clientY-rect.top)*scaleY };
+}
+
+function getNearDot(pos){
+  for(var i=0;i<DOTS.length;i++){
+    var d=DOTS[i];
+    var dist=Math.sqrt((d.x-pos.x)**2+(d.y-pos.y)**2);
+    if(dist<DOT_R*1.5) return d;
+  }
+  return null;
+}
+
+function onStart(e){
+  e.preventDefault();
+  patternDrawing=true;
+  patternSelected=[];
+  document.getElementById('pattern-reset-btn').style.display='none';
+  var pos=getPos(e);
+  var dot=getNearDot(pos);
+  if(dot) patternSelected.push(dot.idx);
+  drawPattern(pos);
+}
+
+function onMove(e){
+  if(!patternDrawing) return;
+  e.preventDefault();
+  var pos=getPos(e);
+  var dot=getNearDot(pos);
+  if(dot && patternSelected.indexOf(dot.idx)===-1){
+    patternSelected.push(dot.idx);
+  }
+  drawPattern(pos);
+}
+
+function onEnd(e){
+  if(!patternDrawing) return;
+  patternDrawing=false;
+  drawPattern(null);
+  checkPattern();
+}
+
+function checkPattern(){
+  var input=patternSelected.join(',');
+  var msgBuffer=new TextEncoder().encode(input);
+  crypto.subtle.digest('SHA-256',msgBuffer).then(function(hashBuffer){
+    var hashArray=Array.from(new Uint8Array(hashBuffer));
+    var hashed=hashArray.map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+    if(hashed===CORRECT_HASH){
+      localStorage.setItem(PATTERN_KEY,'1');
+      document.getElementById('pattern-lock-screen').style.display='none';
+    } else if(patternSelected.length<4){
+    document.getElementById('pattern-msg').textContent='4개 이상 연결해주세요';
+    document.getElementById('pattern-msg').style.color='#f0a500';
+    document.getElementById('pattern-reset-btn').style.display='block';
+    setTimeout(function(){ resetPattern(); },1000);
+  } else {
+    document.getElementById('pattern-msg').textContent='패턴이 틀렸어요';
+    document.getElementById('pattern-msg').style.color='#E24B4A';
+    // 점 빨갛게
+    patternCtx.clearRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
+    DOTS.forEach(function(d){
+      var selected=patternSelected.indexOf(d.idx)!==-1;
+      patternCtx.beginPath();
+      patternCtx.arc(d.x,d.y,DOT_R,0,Math.PI*2);
+      patternCtx.fillStyle=selected?'#E24B4A':'#ddd';
+      patternCtx.fill();
+    });
+    document.getElementById('pattern-reset-btn').style.display='block';
+    setTimeout(function(){ resetPattern(); },800);
+    }
+  });
+}
+
+function resetPattern(){
+  patternSelected=[];
+  patternDrawing=false;
+  document.getElementById('pattern-msg').textContent='패턴을 그려주세요';
+  document.getElementById('pattern-msg').style.color='#888';
+  document.getElementById('pattern-reset-btn').style.display='none';
+  drawPattern(null);
+}
+
+(function initLock(){
+  if(localStorage.getItem(PATTERN_KEY)==='1'){
+    document.getElementById('pattern-lock-screen').style.display='none';
+    return;
+  }
+  patternCanvas=document.getElementById('pattern-canvas');
+  patternCtx=patternCanvas.getContext('2d');
+  initPatternDots();
+  drawPattern(null);
+  patternCanvas.addEventListener('mousedown',onStart);
+  patternCanvas.addEventListener('mousemove',onMove);
+  patternCanvas.addEventListener('mouseup',onEnd);
+  patternCanvas.addEventListener('touchstart',onStart,{passive:false});
+  patternCanvas.addEventListener('touchmove',onMove,{passive:false});
+  patternCanvas.addEventListener('touchend',onEnd);
+})();
+/* ===== 패턴 끝 ===== */
 </script>
 
 <!-- 지출 통계 페이지 -->
