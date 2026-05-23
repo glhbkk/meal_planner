@@ -1399,6 +1399,7 @@ function closePage(name){
   else if(name==='travel') closeTravel();
   else if(name==='toilet') closeToilet();
   else if(name==='stats2') closeBudgetStats();
+  else if(name==='budget-settings') closeBudgetSettings();
   else if(name==='schedule') closeSchedule();
   else if(name==='expiry') closeExpiry();
 
@@ -2559,47 +2560,62 @@ function renderExpiryCard(){
     return;
   }
   body.innerHTML='';
+
+  // 2열 그리드
+  var grid = document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;';
+
   expiryData.forEach(function(item){
     var dday = getDday(item.date);
-    var cls = dday<0 ? 'danger' : dday<=3 ? 'warning' : 'safe';
     var dotColor = dday<0 ? '#E24B4A' : dday<=3 ? '#f0a500' : '#4CAF50';
+    var bgColor = dday<0 ? '#fff5f5' : dday<=3 ? '#fffbf0' : '#f5fff5';
     var ddayText = dday<0 ? '만료 '+Math.abs(dday)+'일' : dday===0 ? '오늘!' : dday+'일 남음';
-    var ddayBg = dday<0 ? '#E24B4A' : dday<=3 ? '#f0a500' : '#4CAF50';
-    var el = document.createElement('div');
-    el.className = 'expiry-item '+cls;
-    el.style.marginBottom = '6px';
-    var _dot=document.createElement('div');
-    _dot.className='expiry-dot'; _dot.style.background=dotColor;
-    var _info=document.createElement('div'); _info.style.flex='1';
-    var _n=document.createElement('div'); _n.className='expiry-name'; _n.textContent=item.name;
-    var _d=document.createElement('div'); _d.className='expiry-date'; _d.textContent=item.date.replace(/-/g,'.');
-    _info.appendChild(_n); _info.appendChild(_d);
-    var _dd=document.createElement('div'); _dd.className='expiry-dday';
-    _dd.style.cssText='background:'+ddayBg+';color:#fff;'; _dd.textContent=ddayText;
-    var _del=document.createElement('button'); _del.className='expiry-del'; _del.textContent='✕'; _del.style.marginLeft='4px';
-    (function(id){_del.onclick=function(){deleteExpiryItem(id);};})(item.id);
-    el.appendChild(_dot); el.appendChild(_info); el.appendChild(_dd); el.appendChild(_del);
-    body.appendChild(el);
+
+    var card = document.createElement('div');
+    card.style.cssText='background:'+bgColor+';border:1.5px solid '+dotColor+';border-radius:12px;padding:10px 12px;position:relative;';
+
+    var del = document.createElement('button');
+    del.textContent='✕';
+    del.style.cssText='position:absolute;top:6px;right:6px;background:none;border:none;color:#ccc;font-size:12px;cursor:pointer;padding:0;line-height:1;';
+    (function(id){ del.onclick=function(){ deleteExpiryItem(id); }; })(item.id);
+
+    var name = document.createElement('div');
+    name.style.cssText='font-size:14px;font-weight:700;color:#222;margin-bottom:4px;padding-right:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+    name.textContent=item.name;
+
+    var date = document.createElement('div');
+    date.style.cssText='font-size:11px;color:#888;margin-bottom:6px;';
+    date.textContent=item.date.replace(/-/g,'.');
+
+    var badge = document.createElement('div');
+    badge.style.cssText='display:inline-block;background:'+dotColor+';color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;';
+    badge.textContent=ddayText;
+
+    card.appendChild(del);
+    card.appendChild(name);
+    card.appendChild(date);
+    card.appendChild(badge);
+    grid.appendChild(card);
   });
 
-  // 타이틀에 뱃지
+  body.appendChild(grid);
+
+  // 뱃지 업데이트
   var title = document.getElementById('expiry-card-title');
-  var danger = expiryData.filter(function(e){ return getDday(e.date)<=0; }).length;
-  var warning = expiryData.filter(function(e){ var d=getDday(e.date); return d>0&&d<=3; }).length;
-  var badge = title.querySelector('.expiry-badge');
-  if(badge) badge.remove();
-  if(danger>0||warning>0){
-    var b = document.createElement('span');
-    b.className='expiry-badge';
-    b.style.cssText='background:'+(danger>0?'#E24B4A':'#f0a500')+';color:#fff;border-radius:20px;font-size:11px;font-weight:700;padding:2px 8px;margin-left:8px;';
-    b.textContent = danger>0 ? '만료 '+danger : '임박 '+warning;
-    title.appendChild(b);
+  if(title){
+    var danger = expiryData.filter(function(e){ return getDday(e.date)<=0; }).length;
+    var warning = expiryData.filter(function(e){ var d=getDday(e.date); return d>0&&d<=3; }).length;
+    var badge2 = title.querySelector('.expiry-badge');
+    if(badge2) badge2.remove();
+    if(danger>0||warning>0){
+      var b=document.createElement('span');
+      b.className='expiry-badge';
+      b.style.cssText='background:'+(danger>0?'#E24B4A':'#f0a500')+';color:#fff;border-radius:20px;font-size:11px;font-weight:700;padding:2px 8px;margin-left:8px;';
+      b.textContent=danger>0?'만료 '+danger:'임박 '+warning;
+      title.appendChild(b);
+    }
   }
 }
-
-/* ===== 음성 입력 ===== */
-var recognition = null;
-var isRecording = false;
 
 function initSpeechRecognition(){
   var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -2969,6 +2985,7 @@ function getCurrentBudgets(){
   return { living:s.living||500000, eating:s.eating||100000, etc:s.etc||200000 };
 }
 function openBudgetSettings(){
+  pushPage('budget-settings');
   var B=getCurrentBudgets();
   document.getElementById('budget-inp-living').value=B.living.toLocaleString()+'원';
   document.getElementById('budget-inp-eating').value=B.eating.toLocaleString()+'원';
