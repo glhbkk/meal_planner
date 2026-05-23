@@ -464,12 +464,25 @@
       <input type="text" id="expiry-name-inp" placeholder="예: 우유, 요거트 (또는 🎤 버튼)" maxlength="30"
         style="width:100%;padding:11px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"
         onkeydown="if(event.key==='Enter')document.getElementById('expiry-date-inp').focus()"/>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;" id="expiry-name-tags">
+        <button onclick="setExpiryName('계란')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🥚 계란</button>
+        <button onclick="setExpiryName('요거트')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🥛 요거트</button>
+        <button onclick="setExpiryName('우유')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🥛 우유</button>
+        <button onclick="setExpiryName('햄')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🍖 햄</button>
+        <button onclick="setExpiryName('오리고기')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🦆 오리고기</button>
+      </div>
     </div>
     <div style="margin-bottom:6px;">
       <div style="font-size:12px;color:#aaa;margin-bottom:6px;">유통기한</div>
-      <input type="date" id="expiry-date-inp"
-        style="width:100%;padding:11px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"
-        onkeydown="if(event.key==='Enter')saveExpiryItem()"/>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="expiry-date-inp" placeholder="예: 260707" maxlength="6" inputmode="numeric"
+          style="flex:1;padding:11px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"
+          onkeydown="if(event.key==='Enter')saveExpiryItem()"/>
+        <button onclick="document.getElementById('expiry-date-picker').showPicker ? document.getElementById('expiry-date-picker').showPicker() : document.getElementById('expiry-date-picker').click()"
+          style="padding:11px 14px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#555;font-size:16px;cursor:pointer;white-space:nowrap;">📅</button>
+        <input type="date" id="expiry-date-picker" style="display:none;"
+          onchange="syncDateFromPicker()"/>
+      </div>
     </div>
     <div style="font-size:11px;color:#bbb;margin-bottom:12px;text-align:center;">
       🎤 "우유 5월 20일" 또는 "계란 2025년 6월 1일" 이라고 말해보세요
@@ -709,12 +722,33 @@
       <input type="text" id="expiry-name-inp" placeholder="예: 우유, 요거트 (또는 🎤 버튼)" maxlength="30"
         style="width:100%;padding:11px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"
         onkeydown="if(event.key==='Enter')document.getElementById('expiry-date-inp').focus()"/>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;" id="expiry-name-tags">
+        <button onclick="setExpiryName('계란')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🥚 계란</button>
+        <button onclick="setExpiryName('요거트')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🥛 요거트</button>
+        <button onclick="setExpiryName('우유')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🥛 우유</button>
+        <button onclick="setExpiryName('햄')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🍖 햄</button>
+        <button onclick="setExpiryName('오리고기')" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:13px;cursor:pointer;">🦆 오리고기</button>
+      </div>
     </div>
     <div style="margin-bottom:6px;">
       <div style="font-size:12px;color:#aaa;margin-bottom:6px;">유통기한</div>
-      <input type="date" id="expiry-date-inp"
-        style="width:100%;padding:11px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"
-        onkeydown="if(event.key==='Enter')saveExpiryItem()"/>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="expiry-date-inp" placeholder="예: 260707" maxlength="6" inputmode="numeric"
+          style="flex:1;padding:11px 14px;font-size:15px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"
+          onkeydown="if(event.key==='Enter')saveExpiryItem()"/>
+        <button onclick="document.getElementById('expiry-date-picker').showPicker ? document.getElementById('expiry-date-picker').showPicker() : document.getElementById('expiry-date-picker').click()"
+          style="padding:11px 14px;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#555;font-size:16px;cursor:pointer;white-space:nowrap;">📅</button>
+        <input type="date" id="expiry-date-picker" style="display:none;"
+          onchange="syncDateFromPicker()"/>
+      </div>
+      <!-- 빠른 선택 버튼 -->
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+        <button onclick="setExpiryDate(7)" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:12px;cursor:pointer;">+1주</button>
+        <button onclick="setExpiryDate(14)" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:12px;cursor:pointer;">+2주</button>
+        <button onclick="setExpiryDate(30)" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:12px;cursor:pointer;">+1개월</button>
+        <button onclick="setExpiryDate(60)" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:12px;cursor:pointer;">+2개월</button>
+        <button onclick="setExpiryDate(90)" style="padding:5px 12px;border:1px solid #ddd;border-radius:20px;background:#fff;color:#555;font-size:12px;cursor:pointer;">+3개월</button>
+      </div>
     </div>
     <div style="font-size:11px;color:#bbb;margin-bottom:12px;text-align:center;">
       🎤 "우유 5월 20일" 또는 "계란 2025년 6월 1일" 이라고 말해보세요
@@ -2458,10 +2492,39 @@ function closeExpiryAdd(){
 }
 function saveExpiryItem(){
   var name = document.getElementById('expiry-name-inp').value.trim();
-  var date = document.getElementById('expiry-date-inp').value;
-  if(!name||!date) return;
+  var rawDate = document.getElementById('expiry-date-inp').value.trim();
+  if(!name||!rawDate) return;
+  // 260707 → 2026-07-07
+  var date;
+  var clean = rawDate.replace(/[^0-9]/g,'');
+  if(clean.length===6){
+    date = '20'+clean.slice(0,2)+'-'+clean.slice(2,4)+'-'+clean.slice(4,6);
+  } else if(clean.length===8){
+    date = clean.slice(0,4)+'-'+clean.slice(4,6)+'-'+clean.slice(6,8);
+  } else {
+    alert('날짜 형식을 확인해주세요\n예: 260707');
+    return;
+  }
   expiryRef.push({name:name, date:date, createdAt:Date.now()});
   closeExpiryAdd();
+}
+
+function setExpiryDate(days){
+  var d = new Date();
+  d.setDate(d.getDate()+days);
+  var yyyy=d.getFullYear();
+  var mm=String(d.getMonth()+1).padStart(2,'0');
+  var dd=String(d.getDate()).padStart(2,'0');
+  document.getElementById('expiry-date-inp').value=yyyy+'.'+mm+'.'+dd;
+}
+
+function syncDateFromPicker(){
+  var val = document.getElementById('expiry-date-picker').value;
+  if(val){
+    // 2026-07-07 → 260707
+    var p = val.split('-');
+    document.getElementById('expiry-date-inp').value = p[0].slice(2)+p[1]+p[2];
+  }
 }
 function deleteExpiryItem(id){
   expiryRef.child(id).remove();
@@ -2563,7 +2626,7 @@ function renderExpiryCard(){
 
   // 2열 그리드
   var grid = document.createElement('div');
-  grid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;';
+  grid.style.cssText='display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:8px;align-items:start;';
 
   expiryData.forEach(function(item){
     var dday = getDday(item.date);
@@ -2572,7 +2635,7 @@ function renderExpiryCard(){
     var ddayText = dday<0 ? '만료 '+Math.abs(dday)+'일' : dday===0 ? '오늘!' : dday+'일 남음';
 
     var card = document.createElement('div');
-    card.style.cssText='background:'+bgColor+';border:1.5px solid '+dotColor+';border-radius:12px;padding:10px 12px;position:relative;';
+    card.style.cssText='background:'+bgColor+';border:1.5px solid '+dotColor+';border-radius:12px;padding:10px 12px;position:relative;min-height:90px;box-sizing:border-box;';
 
     var del = document.createElement('button');
     del.textContent='✕';
@@ -2904,7 +2967,7 @@ function openExpSheet(cat){
   selectExpCat(currentExpCat);
   document.getElementById('inp-en').value = '';
   document.getElementById('inp-ed').value = '';
-  var qt = document.getElementById('quick-tags'); if(qt) qt.innerHTML='';
+
   var today = new Date();
   var yyyy = today.getFullYear();
   var mm = String(today.getMonth()+1).padStart(2,'0');
@@ -3250,6 +3313,18 @@ selectExpCat = function(cat){
     wrap.appendChild(b);
   });
 };
+
+function setExpiryName(name){
+  var inp = document.getElementById('expiry-name-inp');
+  inp.value = name;
+  // 버튼 선택 표시
+  inp.parentElement.querySelectorAll('button').forEach(function(b){
+    b.style.background = b.textContent.includes(name) ? '#185FA5' : '#fff';
+    b.style.color = b.textContent.includes(name) ? '#fff' : '#555';
+    b.style.borderColor = b.textContent.includes(name) ? '#185FA5' : '#ddd';
+  });
+  document.getElementById('expiry-date-inp').focus();
+}
 </script>
 
 <!-- 지출 통계 페이지 -->
