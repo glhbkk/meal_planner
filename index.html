@@ -400,22 +400,22 @@
       <div class="budget-cat-card" onclick="openExpSheet('living')">
         <div class="budget-cat-emoji">🏠</div>
         <div class="budget-cat-name">생활비</div>
-        <div id="cat-spent-living" style="font-size:11px;color:#888;font-weight:500;margin-bottom:1px;">0원 사용</div>
-        <div class="budget-cat-remain" id="cat-remain-living">남음 500,000원</div>
+        <div id="cat-spent-living" style="font-size:11px;color:#888;font-weight:500;margin-bottom:2px;">0원 사용</div>
+        <div class="budget-cat-remain" id="cat-remain-living">500,000원 <span style="font-size:11px;font-weight:400;color:#aaa;">남음</span></div>
         <div class="budget-cat-bar"><div class="budget-cat-bar-fill" id="cat-bar-living" style="width:0%;background:#185FA5;"></div></div>
       </div>
       <div class="budget-cat-card" onclick="openExpSheet('eating')">
         <div class="budget-cat-emoji">🍽️</div>
         <div class="budget-cat-name">외식비</div>
-        <div id="cat-spent-eating" style="font-size:11px;color:#888;font-weight:500;margin-bottom:1px;">0원 사용</div>
-        <div class="budget-cat-remain" id="cat-remain-eating">남음 100,000원</div>
+        <div id="cat-spent-eating" style="font-size:11px;color:#888;font-weight:500;margin-bottom:2px;">0원 사용</div>
+        <div class="budget-cat-remain" id="cat-remain-eating">100,000원 <span style="font-size:11px;font-weight:400;color:#aaa;">남음</span></div>
         <div class="budget-cat-bar"><div class="budget-cat-bar-fill" id="cat-bar-eating" style="width:0%;background:#f0a500;"></div></div>
       </div>
       <div class="budget-cat-card" onclick="openExpSheet('etc')">
         <div class="budget-cat-emoji">💡</div>
         <div class="budget-cat-name">기타생활비</div>
-        <div id="cat-spent-etc" style="font-size:11px;color:#888;font-weight:500;margin-bottom:1px;">0원 사용</div>
-        <div class="budget-cat-remain" id="cat-remain-etc">남음 200,000원</div>
+        <div id="cat-spent-etc" style="font-size:11px;color:#888;font-weight:500;margin-bottom:2px;">0원 사용</div>
+        <div class="budget-cat-remain" id="cat-remain-etc">200,000원 <span style="font-size:11px;font-weight:400;color:#aaa;">남음</span></div>
         <div class="budget-cat-bar"><div class="budget-cat-bar-fill" id="cat-bar-etc" style="width:0%;background:#4CAF50;"></div></div>
       </div>
     </div>
@@ -2977,9 +2977,11 @@ function renderBudget(){
     var remainEl2 = document.getElementById('cat-remain-'+cat);
     var barEl2 = document.getElementById('cat-bar-'+cat);
     if(remainEl2){
-      remainEl2.textContent = remain.toLocaleString()+'원';
+      remainEl2.innerHTML = remain.toLocaleString()+'원 <span style="font-size:11px;font-weight:400;color:#aaa;">남음</span>';
       remainEl2.className = 'budget-cat-remain' + (remain<0?' danger':'');
     }
+    var spentEl2 = document.getElementById('cat-spent-'+cat);
+    if(spentEl2){ spentEl2.textContent = spent.toLocaleString()+'원 사용'; }
     if(barEl2) barEl2.style.width = pct+'%';
   });
 
