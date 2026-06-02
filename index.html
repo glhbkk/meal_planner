@@ -391,9 +391,9 @@
     </div>    <!-- 전체 현황 -->
     <div class="budget-total-card" id="budget-total-card">
       <div class="budget-total-label" id="budget-total-label">이번달 총 지출</div>
-      <div class="budget-total-amount" id="budget-total-amount">0원</div>
+      <div class="budget-total-amount" id="budget-total-amount">0원 <span id="budget-total-remain-inline" style="font-size:14px;font-weight:400;opacity:0.8;">남음</span></div>
       <div class="budget-total-bar"><div class="budget-total-bar-fill" id="budget-total-bar-fill" style="width:0%"></div></div>
-      <div class="budget-total-remain" id="budget-total-remain">총 800,000원  /  남은 예산 800,000원</div>
+      <div class="budget-total-remain" id="budget-total-remain" style="font-size:12px;opacity:0.75;margin-top:4px;">0원 사용</div>
     </div>
     <!-- 카테고리별 현황 -->
     <div class="budget-cats">
@@ -2958,15 +2958,13 @@ function renderBudget(){
 
   // 전체 카드
   var totalPct = Math.min(100, Math.round(totalSpent/totalBudget*100));
+  var totalRemain = totalBudget - totalSpent;
   var totalEl = document.getElementById('budget-total-amount');
-  if(totalEl) totalEl.innerHTML = totalSpent.toLocaleString()+'원 <span style="font-size:16px;font-weight:500;opacity:0.85;">사용</span>';
+  if(totalEl) totalEl.innerHTML = totalRemain.toLocaleString()+'원 <span style="font-size:14px;font-weight:400;opacity:0.8;">남음</span>';
   var barEl = document.getElementById('budget-total-bar-fill');
   if(barEl) barEl.style.width = totalPct+'%';
   var remainEl = document.getElementById('budget-total-remain');
-  if(remainEl){
-    var remain2 = totalBudget - totalSpent;
-    remainEl.textContent = '총 '+totalBudget.toLocaleString()+'원  /  남은 예산 '+remain2.toLocaleString()+'원';
-  }
+  if(remainEl){ remainEl.textContent = totalSpent.toLocaleString()+'원 사용'; }
 
   // 카테고리별
   ['living','eating','etc'].forEach(function(cat){
