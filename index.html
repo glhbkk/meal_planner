@@ -2945,7 +2945,13 @@ function renderBudget(){
     var prevM2 = m2===1?12:m2-1;
     var prevY2 = m2===1?y2-1:y2;
     var prevYY2 = String(prevY2).slice(2);
-    lbl.textContent = prevYY2+'년 '+prevM2+'월 25일 ~ '+yy2+'년 '+m2+'월 24일';
+    // 다음 생활비까지 남은 날 계산 (매달 24일이 마지막날)
+    var today = new Date();
+    var endDate = new Date(y2, m2-1, 24); // 이번 기간 마지막날
+    var diffTime = endDate - new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    var daysLeft = Math.round(diffTime / (1000*60*60*24));
+    var ddayStr = daysLeft > 0 ? ' (D-'+daysLeft+')' : daysLeft===0 ? ' (오늘 마감)' : '';
+    lbl.innerHTML = prevYY2+'년 '+prevM2+'월 25일 ~ '+yy2+'년 '+m2+'월 24일<span style="font-size:11px;opacity:0.75;margin-left:6px;">'+ddayStr+'</span>';
   }
 
   var items = getMonthItems();
@@ -2963,7 +2969,15 @@ function renderBudget(){
   var totalPct = Math.min(100, Math.round(totalSpent/totalBudget*100));
   var totalRemain = totalBudget - totalSpent;
   var totalEl = document.getElementById('budget-total-amount');
-  if(totalEl) totalEl.innerHTML = totalRemain.toLocaleString()+'원 <span style="font-size:14px;font-weight:400;opacity:0.8;">남음</span>';
+  // 남은 일수 계산
+  var today2 = new Date();
+  var m2val = parseInt(currentExpMonth.split('-')[1]);
+  var y2val = parseInt(currentExpMonth.split('-')[0]);
+  var endDate2 = new Date(y2val, m2val-1, 24);
+  var diffDays = Math.round((endDate2 - new Date(today2.getFullYear(), today2.getMonth(), today2.getDate())) / (1000*60*60*24));
+  var perDay = diffDays > 0 ? Math.floor(totalRemain / diffDays) : 0;
+  var perDayStr = diffDays > 0 ? ' <span style="font-size:11px;font-weight:400;opacity:0.75;">하루 '+perDay.toLocaleString()+'원 가능</span>' : '';
+  if(totalEl) totalEl.innerHTML = totalRemain.toLocaleString()+'원 <span style="font-size:14px;font-weight:400;opacity:0.8;">남음</span>'+perDayStr;
   var barEl = document.getElementById('budget-total-bar-fill');
   if(barEl) barEl.style.width = totalPct+'%';
   var remainEl = document.getElementById('budget-total-remain');
