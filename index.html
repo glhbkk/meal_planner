@@ -321,6 +321,29 @@
     .btn-keep:active{background:#eee;}
     .btn-del{flex:2;padding:clamp(13px,4vw,16px);border:none;border-radius:14px;background:#E24B4A;cursor:pointer;font-size:clamp(14px,4.5vw,16px);color:#fff;font-weight:600;}
     .btn-del:active{background:#A32D2D;}
+
+    /* 레시피 */
+    .recipe-search-row{position:sticky;top:0;background:#f5f5f5;padding:0 0 10px;z-index:5;}
+    .recipe-search{width:100%;padding:clamp(10px,3vw,13px) clamp(14px,4vw,16px);font-size:clamp(13px,3.5vw,15px);border:1.5px solid #ddd;border-radius:20px;background:#fff;color:#111;outline:none;}
+    .recipe-search:focus{border-color:#185FA5;}
+    .recipe-grid{display:flex;flex-direction:column;gap:10px;}
+    .recipe-card{background:#fff;border:1px solid #e0e0e0;border-radius:14px;overflow:hidden;cursor:pointer;display:flex;flex-direction:row;align-items:stretch;}
+    .recipe-card:active{background:#f7f7f7;}
+    .recipe-card-photo{width:clamp(64px,20vw,84px);flex-shrink:0;background:#eee;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+    .recipe-card-photo img{width:100%;height:100%;object-fit:contain;display:block;background:#eee;}
+    .recipe-card-photo .ph-empty{font-size:24px;opacity:0.35;}
+    .recipe-card-body{padding:12px 14px;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}
+    .recipe-card-title{font-size:16px;font-weight:700;color:#222;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .recipe-card-date{font-size:11px;color:#bbb;margin-bottom:3px;}
+    .recipe-card-desc{font-size:12px;color:#999;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+    .recipe-photo-input-wrap{border:1.5px dashed #ddd;border-radius:14px;padding:14px;text-align:center;cursor:pointer;color:#999;font-size:13px;background:#fafafa;}
+    .recipe-photo-preview-wrap{position:relative;border-radius:14px;overflow:hidden;}
+    .recipe-photo-preview-wrap img{width:100%;max-height:220px;object-fit:cover;display:block;background:#eee;}
+    .recipe-photo-remove{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(0,0,0,0.55);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .recipe-detail-photo{width:100%;max-height:60vh;object-fit:contain;display:block;background:#f0f0f0;border-radius:14px;margin-bottom:14px;}
+    .recipe-detail-title{font-size:19px;font-weight:700;color:#111;margin-bottom:4px;}
+    .recipe-detail-date{font-size:12px;color:#aaa;margin-bottom:14px;}
+    .recipe-detail-content{font-size:14.5px;line-height:1.7;color:#333;white-space:pre-wrap;word-break:break-word;margin-bottom:20px;}
   </style>
 </head>
 <body>
@@ -350,9 +373,10 @@
   <div style="padding:8px clamp(10px,3vw,14px) 0;">
 
     <!-- 2열 버튼 그리드 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-      <button class="main-btn" onclick="openTodo()"><span style="font-size:clamp(22px,6vw,26px);">✅</span><span>To-Do 리스트</span></button>
-      <button class="main-btn" onclick="openCart()"><span style="font-size:clamp(22px,6vw,26px);">🛒</span><span>장보기 리스트</span></button>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+      <button class="main-btn" onclick="openTodo()"><span style="font-size:clamp(20px,5.5vw,24px);">✅</span><span>To-Do</span></button>
+      <button class="main-btn" onclick="openRecipe()"><span style="font-size:clamp(20px,5.5vw,24px);">🍳</span><span>레시피</span></button>
+      <button class="main-btn" onclick="openCart()"><span style="font-size:clamp(20px,5.5vw,24px);">🛒</span><span>장보기</span></button>
     </div>
 
   </div>
@@ -642,6 +666,94 @@
     </div>
     <div class="todo-list" id="toilet-list"></div>
   </div>
+</div>
+
+<!-- 레시피 페이지 -->
+<div class="todo-page" id="recipe-page" style="display:none;">
+  <div class="todo-header">
+    <button class="todo-back" onclick="history.back()">‹</button>
+    <div class="todo-title">📖 레시피</div>
+    <button onclick="openRecipeAdd()" style="font-size:12px;color:#185FA5;background:none;border:1px solid #B5D4F4;border-radius:20px;padding:4px 12px;cursor:pointer;white-space:nowrap;">+ 추가</button>
+  </div>
+  <div class="todo-body">
+    <div class="recipe-search-row">
+      <input type="text" class="recipe-search" id="recipe-search-inp" placeholder="🔍 요리 이름으로 검색" oninput="renderRecipeGrid()" autocomplete="off"/>
+    </div>
+    <div class="todo-count" id="recipe-count"></div>
+    <div class="recipe-grid" id="recipe-grid"></div>
+  </div>
+</div>
+
+<!-- 레시피 등록/수정 시트 -->
+<div class="overlay" id="recipe-edit-overlay" style="display:none;z-index:500;" onclick="if(event.target===this)closeRecipeEdit()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="recipe-edit-title" style="margin-bottom:14px;">레시피 등록</div>
+
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;color:#aaa;margin-bottom:6px;">요리 제목</div>
+      <input type="text" id="recipe-inp-title" placeholder="예: 김치찌개" maxlength="40" autocomplete="off" lang="ko"
+        style="width:100%;padding:11px 14px;font-size:15px;font-weight:600;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;"/>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;color:#aaa;margin-bottom:6px;">사진 (선택)</div>
+      <input type="file" id="recipe-photo-file" accept="image/*" style="display:none;" onchange="handleRecipePhotoSelect(event)"/>
+      <div id="recipe-photo-empty-wrap" class="recipe-photo-input-wrap" onclick="document.getElementById('recipe-photo-file').click()">
+        📷 눌러서 사진 첨부
+      </div>
+      <div id="recipe-photo-preview-wrap" class="recipe-photo-preview-wrap" style="display:none;">
+        <img id="recipe-photo-preview" src=""/>
+        <button type="button" class="recipe-photo-remove" onclick="removeRecipePhoto()">✕</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:6px;">
+      <div style="font-size:12px;color:#aaa;margin-bottom:6px;">요리 내용</div>
+      <textarea id="recipe-inp-content" rows="6" placeholder="재료, 만드는 법 등을 자유롭게 적어주세요" lang="ko"
+        style="width:100%;padding:11px 14px;font-size:14px;line-height:1.6;border:1.5px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111;outline:none;resize:vertical;box-sizing:border-box;"></textarea>
+    </div>
+
+    <div class="sheet-btns">
+      <button class="btn-save" onclick="saveRecipe()">등록</button>
+      <button class="btn-cancel" onclick="closeRecipeEdit()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 레시피 상세보기 -->
+<div class="overlay" id="recipe-detail-overlay" style="display:none;z-index:450;align-items:center;" onclick="if(event.target===this)closeRecipeDetail()">
+  <div class="sheet" style="border-radius:20px;max-height:85vh;overflow-y:auto;" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <img id="recipe-detail-photo" class="recipe-detail-photo" style="display:none;cursor:zoom-in;" src="" onclick="openRecipePhotoViewer()"/>
+    <div class="recipe-detail-title" id="recipe-detail-title"></div>
+    <div class="recipe-detail-date" id="recipe-detail-date"></div>
+    <div class="recipe-detail-content" id="recipe-detail-content"></div>
+    <div class="sheet-btns">
+      <button class="btn-save" onclick="editRecipeFromDetail()">수정</button>
+      <button class="btn-cancel" onclick="askDeleteRecipe()" style="color:#E24B4A;">삭제</button>
+    </div>
+  </div>
+</div>
+
+<!-- 레시피 삭제 확인 -->
+<div class="cfm-popup" id="recipe-cfm-popup" style="display:none;z-index:550;">
+  <div class="cfm-backdrop" onclick="closeRecipeCfm()"></div>
+  <div class="cfm-box">
+    <div class="cfm-handle"></div>
+    <div class="cfm-name" id="recipe-cfm-name"></div>
+    <div class="cfm-msg">이 레시피를 삭제할까요?</div>
+    <div class="cfm-btns">
+      <button class="btn-del" onclick="doDeleteRecipe()">삭제</button>
+      <button class="btn-keep" onclick="closeRecipeCfm()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- 레시피 사진 원본 뷰어 -->
+<div id="recipe-photo-viewer" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:700;align-items:center;justify-content:center;" onclick="if(event.target===this)closeRecipePhotoViewer()">
+  <img id="recipe-photo-viewer-img" src="" style="max-width:100%;max-height:100%;object-fit:contain;"/>
+  <button onclick="closeRecipePhotoViewer()" style="position:fixed;top:calc(16px + env(safe-area-inset-top));right:16px;width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,0.15);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
 </div>
 
 <!-- 지출 추가 시트 -->
@@ -1511,9 +1623,23 @@ function closePage(name){
   else if(name==='budget-settings') closeBudgetSettings();
   else if(name==='schedule') closeSchedule();
   else if(name==='expiry') closeExpiry();
+  else if(name==='recipe') closeRecipe();
 
 }
 window.addEventListener('popstate', function(e){
+  // 레시피 내부 레이어(등록/수정/상세/삭제확인/사진뷰어) 단계별 뒤로가기 처리
+  if(e.state && e.state.page === 'recipe'){
+    var targetLayer = e.state.rlayer || 0;
+    while(recipeStack.length > targetLayer){
+      var top = recipeStack.pop();
+      if(top === 'edit') closeRecipeEditUI();
+      else if(top === 'detail') closeRecipeDetailUI();
+      else if(top === 'cfm') closeRecipeCfmUI();
+      else if(top === 'photo') closeRecipePhotoViewerUI();
+    }
+    document.getElementById('recipe-page').style.display = 'block';
+    return;
+  }
   if(e.state && e.state.page && e.state.page!=='home'){
     closePage(e.state.page);
   } else if(!e.state || e.state.page==='home'){
@@ -1529,6 +1655,7 @@ window.addEventListener('popstate', function(e){
     closeBudgetStats();
     closeBudgetSettings();
     closeToilet();
+    closeRecipe();
     // 다시 home state 유지
     history.replaceState({page:'home'}, '', '');
   }
@@ -3418,6 +3545,264 @@ function renderToilet(){
   });
 }
 /* ===== 화장실 끝 ===== */
+
+/* ===== 레시피 시작 ===== */
+var recipeRef = db.ref('recipes');
+var recipeData = {};
+var recipePhotoBase64 = null; // 편집중인 사진(base64)
+var recipeEditId = null;      // null=신규 등록, 값 있으면 수정
+var recipeDetailId = null;    // 상세보기 중인 레시피 id
+var recipeStack = [];         // 레시피 안에서 열려있는 레이어 스택 (뒤로가기 단계별 처리용)
+
+function pushRecipeLayer(name){
+  recipeStack.push(name);
+  history.pushState({page:'recipe', rlayer:recipeStack.length}, '', '');
+}
+
+recipeRef.on('value', function(s){
+  recipeData = s.val() || {};
+  renderRecipeGrid();
+});
+
+function openRecipe(){
+  recipeStack = [];
+  document.getElementById('recipe-page').style.display = 'block';
+  pushPage('recipe');
+  renderRecipeGrid();
+}
+function closeRecipe(){
+  document.getElementById('recipe-page').style.display = 'none';
+  closeRecipeEditUI();
+  closeRecipeDetailUI();
+  closeRecipeCfmUI();
+  closeRecipePhotoViewerUI();
+  recipeStack = [];
+}
+
+function openRecipeAdd(){
+  recipeEditId = null;
+  recipePhotoBase64 = null;
+  document.getElementById('recipe-edit-title').textContent = '레시피 등록';
+  document.getElementById('recipe-inp-title').value = '';
+  document.getElementById('recipe-inp-content').value = '';
+  document.getElementById('recipe-photo-file').value = '';
+  showRecipePhotoPreview(null);
+  document.getElementById('recipe-edit-overlay').style.display = 'flex';
+  pushRecipeLayer('edit');
+  setTimeout(function(){ document.getElementById('recipe-inp-title').focus(); }, 200);
+}
+
+function openRecipeEdit(id){
+  var item = recipeData[id];
+  if(!item) return;
+  recipeEditId = id;
+  recipePhotoBase64 = item.photo || null;
+  document.getElementById('recipe-edit-title').textContent = '레시피 수정';
+  document.getElementById('recipe-inp-title').value = item.title || '';
+  document.getElementById('recipe-inp-content').value = item.content || '';
+  document.getElementById('recipe-photo-file').value = '';
+  showRecipePhotoPreview(recipePhotoBase64);
+  document.getElementById('recipe-edit-overlay').style.display = 'flex';
+  pushRecipeLayer('edit');
+}
+
+// 취소/배경 클릭 시 호출 - 히스토리를 한 단계 뒤로 보내면 popstate에서 실제로 닫힘
+function closeRecipeEdit(){
+  history.back();
+}
+// 실제 DOM을 숨기는 순수 함수 (popstate, 전체 닫기에서 사용)
+function closeRecipeEditUI(){
+  var el = document.getElementById('recipe-edit-overlay');
+  if(el) el.style.display = 'none';
+}
+
+function showRecipePhotoPreview(dataUrl){
+  var emptyWrap = document.getElementById('recipe-photo-empty-wrap');
+  var previewWrap = document.getElementById('recipe-photo-preview-wrap');
+  var img = document.getElementById('recipe-photo-preview');
+  if(dataUrl){
+    img.src = dataUrl;
+    emptyWrap.style.display = 'none';
+    previewWrap.style.display = 'block';
+  } else {
+    emptyWrap.style.display = 'block';
+    previewWrap.style.display = 'none';
+  }
+}
+
+// 사진 선택 시 리사이즈+압축해서 base64로 저장 (Firebase RTDB에 바로 저장하기 위함)
+function handleRecipePhotoSelect(event){
+  var file = event.target.files && event.target.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var img = new Image();
+    img.onload = function(){
+      var maxDim = 900;
+      var w = img.width, h = img.height;
+      if(w > maxDim || h > maxDim){
+        if(w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      var canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      var dataUrl = canvas.toDataURL('image/jpeg', 0.72);
+      recipePhotoBase64 = dataUrl;
+      showRecipePhotoPreview(dataUrl);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeRecipePhoto(){
+  recipePhotoBase64 = null;
+  document.getElementById('recipe-photo-file').value = '';
+  showRecipePhotoPreview(null);
+}
+
+function saveRecipe(){
+  var title = document.getElementById('recipe-inp-title').value.trim();
+  var content = document.getElementById('recipe-inp-content').value.trim();
+  if(!title){
+    document.getElementById('recipe-inp-title').focus();
+    return;
+  }
+  var payload = {
+    title: title,
+    content: content,
+    photo: recipePhotoBase64 || null,
+    updatedAt: Date.now()
+  };
+  if(recipeEditId){
+    recipeRef.child(recipeEditId).update(payload);
+  } else {
+    payload.createdAt = Date.now();
+    recipeRef.push(payload);
+  }
+  if(recipeStack.length){ history.go(-recipeStack.length); }
+  else { closeRecipeEditUI(); }
+}
+
+function escHtmlRecipe(str){
+  return (str||'').replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
+  });
+}
+
+function formatRecipeDate(ts){
+  if(!ts) return '';
+  var d = new Date(ts);
+  return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
+}
+
+function renderRecipeGrid(){
+  var grid = document.getElementById('recipe-grid');
+  var countEl = document.getElementById('recipe-count');
+  if(!grid) return;
+  var searchInp = document.getElementById('recipe-search-inp');
+  var q = (searchInp && searchInp.value || '').trim().toLowerCase();
+  var items = Object.entries(recipeData).map(function(e){ return Object.assign({id:e[0]}, e[1]); });
+  if(q){
+    items = items.filter(function(item){
+      return (item.title||'').toLowerCase().indexOf(q) !== -1 || (item.content||'').toLowerCase().indexOf(q) !== -1;
+    });
+  }
+  items.sort(function(a,b){ return (b.createdAt||0)-(a.createdAt||0); });
+
+  countEl.textContent = items.length + '개';
+
+  if(items.length===0){
+    grid.innerHTML = '<div class="todo-empty">' + (q ? '검색 결과가 없어요 🔍' : '레시피를 추가해보세요 📖') + '</div>';
+    return;
+  }
+
+  grid.innerHTML = items.map(function(item){
+    var photoHtml = item.photo
+      ? '<img src="'+item.photo+'" alt=""/>'
+      : '<span class="ph-empty">🍳</span>';
+    return '<div class="recipe-card" onclick="openRecipeDetail(\''+item.id+'\')">'
+      + '<div class="recipe-card-photo">'+photoHtml+'</div>'
+      + '<div class="recipe-card-body">'
+      + '<div class="recipe-card-title">'+escHtmlRecipe(item.title)+'</div>'
+      + '<div class="recipe-card-date">'+formatRecipeDate(item.createdAt)+'</div>'
+      + '<div class="recipe-card-desc">'+escHtmlRecipe(item.content)+'</div>'
+      + '</div></div>';
+  }).join('');
+}
+
+function openRecipeDetail(id){
+  var item = recipeData[id];
+  if(!item) return;
+  recipeDetailId = id;
+  var photoEl = document.getElementById('recipe-detail-photo');
+  if(item.photo){
+    photoEl.src = item.photo;
+    photoEl.style.display = 'block';
+  } else {
+    photoEl.style.display = 'none';
+  }
+  document.getElementById('recipe-detail-title').textContent = item.title || '';
+  document.getElementById('recipe-detail-date').textContent = formatRecipeDate(item.createdAt);
+  document.getElementById('recipe-detail-content').textContent = item.content || '';
+  document.getElementById('recipe-detail-overlay').style.display = 'flex';
+  pushRecipeLayer('detail');
+}
+
+function closeRecipeDetail(){
+  history.back();
+}
+function closeRecipeDetailUI(){
+  var el = document.getElementById('recipe-detail-overlay');
+  if(el) el.style.display = 'none';
+}
+
+function openRecipePhotoViewer(){
+  if(!recipeDetailId) return;
+  var item = recipeData[recipeDetailId];
+  if(!item || !item.photo) return;
+  document.getElementById('recipe-photo-viewer-img').src = item.photo;
+  document.getElementById('recipe-photo-viewer').style.display = 'flex';
+  pushRecipeLayer('photo');
+}
+function closeRecipePhotoViewer(){
+  history.back();
+}
+function closeRecipePhotoViewerUI(){
+  var el = document.getElementById('recipe-photo-viewer');
+  if(el) el.style.display = 'none';
+}
+
+// 상세보기에서 수정으로 이동: 상세시트는 그대로 둔 채(어두운 배경에 가려짐) 편집시트를 위에 쌓음
+// -> 뒤로가기를 누르면 편집시트만 닫히고 상세보기가 다시 보임
+function editRecipeFromDetail(){
+  var id = recipeDetailId;
+  if(id) openRecipeEdit(id);
+}
+
+function askDeleteRecipe(){
+  if(!recipeDetailId) return;
+  var item = recipeData[recipeDetailId];
+  document.getElementById('recipe-cfm-name').textContent = item ? item.title : '';
+  document.getElementById('recipe-cfm-popup').style.display = 'flex';
+  pushRecipeLayer('cfm');
+}
+function closeRecipeCfm(){
+  history.back();
+}
+function closeRecipeCfmUI(){
+  var el = document.getElementById('recipe-cfm-popup');
+  if(el) el.style.display = 'none';
+}
+function doDeleteRecipe(){
+  if(!recipeDetailId) return;
+  recipeRef.child(recipeDetailId).remove();
+  if(recipeStack.length){ history.go(-recipeStack.length); }
+  else { closeRecipeCfmUI(); closeRecipeDetailUI(); }
+}
+/* ===== 레시피 끝 ===== */
 
 var QUICK_TAGS={
   living:['코코','다이소','롯마','홈플','와마트'],
